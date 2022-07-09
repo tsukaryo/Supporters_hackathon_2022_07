@@ -106,7 +106,7 @@ class CategorySelect():
                                 "action": {
                                     "type": "postback",
                                     "label": "旅行",
-                                    "data": "旅行",
+                                    "data": "旅行_登録",
                                     "displayText": "場所",
                                 }
                             },
@@ -115,7 +115,7 @@ class CategorySelect():
                                 "action": {
                                     "type": "postback",
                                     "label": "風俗",
-                                    "data": "風俗",
+                                    "data": "風俗_登録",
                                     "displayText": "風俗",
                                 }
                             }
@@ -150,7 +150,7 @@ class CategorySelect():
                                 "action": {
                                     "type": "postback",
                                     "label": "食事",
-                                    "data": "meal",
+                                    "data": "食事_表示",
                                     "displayText": "食べに行きたいお店を表示",
                                 }
                             },
@@ -159,7 +159,7 @@ class CategorySelect():
                                 "action": {
                                     "type": "postback",
                                     "label": "旅行",
-                                    "data": "travel",
+                                    "data": "旅行_表示",
                                     "displayText": "行きたい場所を表示",
                                 }
                             },
@@ -168,7 +168,7 @@ class CategorySelect():
                                 "action": {
                                     "type": "postback",
                                     "label": "風俗",
-                                    "data": "brothel",
+                                    "data": "風俗_表示",
                                     "displayText": "行きたい風俗を表示",
                                 }
                             }

@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import urllib.request
 import json
+import os
 
 REPLY_ENDPOINT_URL = "https://api.line.me/v2/bot/message/reply"
 CHANNEL_SECRET = "4767dec262d22735f5d4f085c7800bcd"
@@ -10,6 +11,12 @@ HEADER = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer ' + ACCESSTOKEN
 }
+
+current_dir = os.path.dirname(__file__) #このfileのあるディレクトリパスを取得
+file_path = os.path.join(current_dir, "flexmessage.json")
+json_open = open(file_path, 'r')
+json_load = json.load(json_open)
+
 
 class FlexMessage():
     def __init__(self, messages):
@@ -22,23 +29,7 @@ class FlexMessage():
                 {
                     "type": "flex",
                     "altText": "This is a Flex Message",
-                    "contents": {
-                        "type": "bubble",
-                        "body": {
-                        "type": "box",
-                        "layout": "horizontal",
-                        "contents": [
-                            {
-                            "type": "text",
-                            "text": "Hello,"
-                            },
-                            {
-                            "type": "text",
-                            "text": "World!"
-                            }
-                        ]
-                        }
-                    }
+                    "contents": json_load
                 }
             ]
         }

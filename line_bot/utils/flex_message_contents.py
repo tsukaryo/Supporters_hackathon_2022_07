@@ -13,7 +13,7 @@ def make_contents(image_file, place_name, url_name):
         "type": "bubble",
         "hero": {
             "type": "image",
-            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png", #ここに入れたい画像
+            "url": "", #ここに入れたい画像
             "size": "full",
             "aspectRatio": "20:13",
             "aspectMode": "cover"
@@ -53,7 +53,7 @@ def make_contents(image_file, place_name, url_name):
     return contents
 
 #最終的なcontents作成
-def make_flex_message_contents(contents_list):
+def make_flex_contents(contents_list):
     contents = {
     "type": "carousel",
     "contents": contents_list

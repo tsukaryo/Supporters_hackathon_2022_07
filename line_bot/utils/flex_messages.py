@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 import urllib.request
 import json
 import os
-from .flex_message_contents import make_contents, make_flex_message_contents 
+# from .flex_message_contents import make_contents, make_flex_contents 
 REPLY_ENDPOINT_URL = "https://api.line.me/v2/bot/message/reply"
 CHANNEL_SECRET = "4767dec262d22735f5d4f085c7800bcd"
 ACCESSTOKEN = 'BSLzDq5+3GTnn2uBODxBRI1mxDvzBsUF+mwwULR0CCF5x4MM5NlDeyOmqJdIA3Q2CR+XHqGRYV1b6FZuRTFK6HYqZkiVKXYOiXT5baAySnLLtGuQ/bPHu6KU9DIMlJJUNUgxfFyZ3BVwm2FPy/WfKwdB04t89/1O/w1cDnyilFU='
@@ -12,11 +12,58 @@ HEADER = {
     'Authorization': 'Bearer ' + ACCESSTOKEN
 }
 
-current_dir = os.path.dirname(__file__) #このfileのあるディレクトリパスを取得
-file_path = os.path.join(current_dir, "flexmessage.json")
-json_open = open(file_path, 'r')
-json_load = json.load(json_open)
-json_open.close()
+
+def make_contents(image_file, place_name, url_name):
+    contents = {
+        "type": "bubble",
+        "hero": {
+            "type": "image",
+            "url": "", #ここに入れたい画像
+            "size": "full",
+            "aspectRatio": "20:13",
+            "aspectMode": "cover"
+        },
+        "body": {
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+            {
+                "type": "text",
+                "text": "", #ここに場所名 ex.平成女学院
+                "size": "xl",
+                "weight": "bold",
+                "align": "center"
+            }
+            ]
+        },
+        "footer": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+            {
+                "type": "button",
+                "action": {
+                "type": "uri",
+                "label": "WEBSITE",
+                "uri": "" #ここにURL
+                }
+            }
+            ]
+        }
+    }
+    contents["hero"]["url"] = image_file
+    contents["body"]["contents"]["text"] = place_name
+    contents["footer"]["contents"]["uri"] = url_name
+    
+    return contents
+
+#最終的なcontents作成
+def make_flex_contents(contents_list):
+    contents = {
+    "type": "carousel",
+    "contents": contents_list
+    }
+    return contents
 
 
 class FlexMessage(): 
@@ -30,7 +77,7 @@ class FlexMessage():
         return 0
     
     def make_flex_massage_content_dict(self):
-        self.contents = make_flex_message_contents(self.contents_list)
+        self.contents = make_flex_contents(self.contents_list)
         return 0
 
     def reply(self, reply_token):

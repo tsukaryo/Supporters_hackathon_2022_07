@@ -45,15 +45,24 @@ def index_view(request):
         
 
         #postbackしたとき
-        if event_type == "postback":
+        if event_type == "postback" and Status.objects.filter(status=5):
             print("EVENT:", data)
             post_back = data["postback"]
             post_back_data = post_back["data"] #postbackのデータが入ってる
             #post_back_dataを引数にカテゴリ表示する関数つくって
+            status = Status.objects.get(status=5)
+            status.status = 0
+            place_data = Place.objects.get(id=status.place_id)
+            place_data.category = post_back_data
+            place_data.save()
+            status.save()
+            send_text = "保存しました"
+            line_message_send = LineMessage(message_creater.create_single_text_message(send_text))
+            line_message_send.reply(reply_token)
             
 
-            select_category = CategorySelect()
-            select_category.CS_reply_register(reply_token)
+            # select_category = CategorySelect()
+            # select_category.CS_reply_show(reply_token)
             return HttpResponse("ok")
 
         #event_type == message
@@ -192,44 +201,44 @@ def db_register_url(reply_token,message):
     # line_category_register.CS_reply_register(reply_token)
     return 0
 
-def db_register_category(reply_token,message):
-    status = Status.objects.get(status=5)
-    print("keep_status==5に入りました。")
-    #登録し終えたので0に戻す
-    status.status = 0
-    #received_category = message['text']
-    #quickreplyで選択情報の取得
-    line_category_register = CategorySelect()
-    line_category_register.CS_reply_register(reply_token)
-    print(f"line_category_register:{line_category_register}")
-    
-    #categoryをデータベースに登録
-    place_data = Place.objects.get(id=status.place_id)
-    place_data.category = line_category_register
-    #place_data.category = received_category
-    status.save()
-    place_data.save()
-    send_text_place = "保存しました"
-    line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
-    line_message_send_name.reply(reply_token)
-    return 0
-
 # def db_register_category(reply_token,message):
 #     status = Status.objects.get(status=5)
 #     print("keep_status==5に入りました。")
 #     #登録し終えたので0に戻す
 #     status.status = 0
-#     #quickreplyでカテゴリーを選択
-#     received_category = QuickReply()
+#     # received_category = message['text']
+#     #quickreplyで選択情報の取得
+#     line_category_register = CategorySelect()
+#     line_category_register.CS_reply_register(reply_token)
+#     print(f"line_category_register:{line_category_register}")
+    
 #     #categoryをデータベースに登録
 #     place_data = Place.objects.get(id=status.place_id)
-#     place_data.category = received_category
+#     place_data.category = line_category_register
+#     #place_data.category = received_category
 #     status.save()
 #     place_data.save()
 #     send_text_place = "保存しました"
 #     line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
 #     line_message_send_name.reply(reply_token)
 #     return 0
+
+def db_register_category(reply_token,message):
+    status = Status.objects.get(status=5)
+    print("keep_status==5に入りました。")
+    #登録し終えたので0に戻す
+    status.status = 0
+    #quickreplyでカテゴリーを選択
+    received_category = message['text']
+    #categoryをデータベースに登録
+    place_data = Place.objects.get(id=status.place_id)
+    place_data.category = received_category
+    status.save()
+    place_data.save()
+    send_text_place = "保存しました"
+    line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
+    line_message_send_name.reply(reply_token)
+    return 0
 
 
 #テスト

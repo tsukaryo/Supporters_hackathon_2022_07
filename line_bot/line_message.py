@@ -95,25 +95,28 @@ class CategorySelect():
                             {
                                 "type": "action",
                                 "action": {
-                                    "type": "message",
+                                    "type": "postback",
                                     "label": "食事",
-                                    "text": "食べに行きたいお店を登録",
+                                    "data": "食事",
+                                    "displayText": "食事",
                                 }
                             },
                             {
                                 "type": "action",
                                 "action": {
-                                    "type": "message",
+                                    "type": "postback",
                                     "label": "旅行",
-                                    "text": "行きたい場所を登録",
+                                    "data": "旅行",
+                                    "displayText": "場所",
                                 }
                             },
                             {
                                 "type": "action",
                                 "action": {
-                                    "type": "message",
+                                    "type": "postback",
                                     "label": "風俗",
-                                    "text": "行きたい風俗を登録",
+                                    "data": "風俗",
+                                    "displayText": "風俗",
                                 }
                             }
                         ]
@@ -147,8 +150,8 @@ class CategorySelect():
                                 "action": {
                                     "type": "postback",
                                     "label": "食事",
-                                    "data": "show_lunch",
-                                    "Desplaytext": "食べに行きたいお店を表示",
+                                    "data": "meal",
+                                    "displayText": "食べに行きたいお店を表示",
                                 }
                             },
                             {
@@ -156,8 +159,8 @@ class CategorySelect():
                                 "action": {
                                     "type": "postback",
                                     "label": "旅行",
-                                    "data": "show_travel",
-                                    "text": "行きたい場所を表示",
+                                    "data": "travel",
+                                    "displayText": "行きたい場所を表示",
                                 }
                             },
                             {
@@ -165,8 +168,8 @@ class CategorySelect():
                                 "action": {
                                     "type": "postback",
                                     "label": "風俗",
-                                    "data": "show_brothel",
-                                    "text": "行きたい風俗を表示",
+                                    "data": "brothel",
+                                    "displayText": "行きたい風俗を表示",
                                 }
                             }
                         ]

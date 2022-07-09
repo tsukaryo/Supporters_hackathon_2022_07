@@ -12,7 +12,7 @@ id = 0
 
 @csrf_exempt
 def index_view(request):
-    global keep_status
+    global keep_status,id
     if request.method == 'POST':
         request = json.loads(request.body.decode('utf-8'))
         print("request:")

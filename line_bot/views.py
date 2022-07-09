@@ -89,6 +89,11 @@ def index_view(request):
             db_register_url(reply_token,message)
             return HttpResponse("ok")
 
+        # 保存したい場所のカテゴリーを取得した時
+        elif Status.objects.filter(status=1):
+            db_register_category(reply_token,message)
+            return HttpResponse("ok")
+
         # URLが送られてきた後に"行きたい"というメッセージが来た時
         elif  Status.objects.filter(status=3):
             if "行きたい" in message['text']:

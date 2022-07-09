@@ -28,3 +28,45 @@ class LineMessage():
             print(err)
         except urllib.error.URLError as err:
             print(err.reason)
+
+class QuickReply():
+    def __init__(self, messages):
+        self.messages = messages
+    
+    def quickreply(self, reply_token):
+        body = {
+            'replyToken': reply_token,
+            "messages":{
+                "type": "text",
+                "text": "URLと名前どっち先に登録する?",
+                "quickReply":{
+                    "items": [
+                        {
+                            "type": "action",
+                            "action": {
+                                "type": "message",
+                                "label": "URL",
+                                "text": "URLを先に登録"
+                            }
+                        },
+                        {
+                            "type": "action",
+                            "action": {
+                                "type": "message",
+                                "label": "Name",
+                                "text": "名前を先に登録"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+        req = urllib.request.Request(REPLY_ENDPOINT_URL, json.dumps(body).encode(), HEADER)
+        try:
+            with urllib.request.urlopen(req) as res:
+                body = res.read()
+        except urllib.error.HTTPError as err:
+            print(err)
+        except urllib.error.URLError as err:
+            print(err.reason)
+            

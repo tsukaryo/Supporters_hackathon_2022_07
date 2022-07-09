@@ -63,9 +63,7 @@ class QuickReply():
             "messages":[
                 {
                     "type": "text",
-                    "text": "select URL or Name"
-                },
-                {
+                    "text": "select URL or Name",
                     "quickReply":{
                         "items": [
                             {

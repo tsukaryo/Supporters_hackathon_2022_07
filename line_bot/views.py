@@ -48,7 +48,7 @@ def index_view(request):
          # 「web」と送られてきた時
         if message['text'] == "web":
             line_quickreply_send = URLMessage(message_creater.create_single_text_message("test"))
-            line_quickreply_send.quickreply(reply_token)
+            line_quickreply_send.reply(reply_token)
             return HttpResponse("ok")
 
         # 「クイック」とメッセージが送られた時

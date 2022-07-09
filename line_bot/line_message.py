@@ -41,7 +41,7 @@ class QuickReply():
                 {
                     "type": "text",
                     # "text": "select URL or Name",
-                    "text": "表示または登録",
+                    "text": "表示または保存",
                     "quickReply":{
                         "items": [
                             {
@@ -74,36 +74,3 @@ class QuickReply():
         except urllib.error.URLError as err:
             print(err.reason)
             
-
-class URLMessage():
-    def __init__(self, messages):
-        self.messages = messages
-
-    def reply(self, reply_token):
-        body = {
-            'replyToken': reply_token,
-            'messages': [
-                    {  
-                        "type":"uri",
-                        "label":"Web",
-                        "linkUri":"https://classmethod.jp/",
-                        "area": {
-                            "x": 0,
-                            "y": 0,
-                            "width": 520,
-                            "height": 1040
-                            }
-                    }
-                        ]
-        }
-        print(body)
-        req = urllib.request.Request(REPLY_ENDPOINT_URL, json.dumps(body).encode(), HEADER)
-        try:
-            with urllib.request.urlopen(req) as res:
-                body = res.read()
-        except urllib.error.HTTPError as err:
-            print(err)
-        except urllib.error.URLError as err:
-            print(err.reason)
-
-

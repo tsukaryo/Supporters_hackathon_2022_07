@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .utils import message_creater
 from .utils.flex_messages import FlexMessage
 from .utils.uri_message import URIMessage
-from .line_message import LineMessage,QuickReply,URLMessage
+from .line_message import LineMessage,QuickReply
 from .models import Place,Status
 import os
 import pprint

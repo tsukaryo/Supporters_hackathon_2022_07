@@ -50,7 +50,7 @@ def index_view(request):
             # post_back = data["postback"]
             # post_back_data = post_back["data"]
             select_category = CategorySelect()
-            select_category.CS_reply(reply_token)
+            select_category.CS_reply_register(reply_token)
             return HttpResponse("ok")
 
         #event_type == message
@@ -191,9 +191,9 @@ def db_register_category(reply_token,message):
     status.status = 0
     received_category = message['text']
     #quickreplyで選択情報の取得
-    line_quickreply_send = QuickReply()
-    line_quickreply_send.quickreply(reply_token)
-    print(line_quickreply_send)
+    line_category_register = CategorySelect()
+    line_category_register.CS_reply(reply_token)
+    print(line_category_register)
     
     #categoryをデータベースに登録
     place_data = Place.objects.get(id=status.place_id)

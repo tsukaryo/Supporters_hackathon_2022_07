@@ -48,8 +48,8 @@ def index_view(request):
         if event_type == "postback":
             print("EVENT:", data)
             post_back = data["postback"]
-            post_back_data = post_back["data"]
-            #func(post_back_data)
+            post_back_data = post_back["data"] #postbackのデータが入ってる
+            #post_back_dataを引数にカテゴリ表示する関数つくって
             
 
             select_category = CategorySelect()
@@ -141,7 +141,7 @@ def db_register_start(reply_token):
 
 def place_display(reply_token):
     places = Place.objects.all()
-    # places = 
+    # places = Place.objects.all().filter(category="")
     place_name = ""
     place_url = ""
     for p in places:
@@ -186,7 +186,7 @@ def db_register_url(reply_token,message):
     place_data.save()
     send_text_place = "カテゴリーを入力してください"
     
-    line_message_send_name = QuickReply(message_creater.create_single_text_message(send_text_place))
+    line_message_send_name = QuickReply()
     line_message_send_name.quickreply(reply_token)
     return 0
 

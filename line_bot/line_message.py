@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import urllib.request
 import json
+import pprint
 
 REPLY_ENDPOINT_URL = "https://api.line.me/v2/bot/message/reply"
 CHANNEL_SECRET = "4767dec262d22735f5d4f085c7800bcd"
@@ -124,6 +125,7 @@ class CategorySelect():
         try:
             with urllib.request.urlopen(req) as res:
                 body = res.read()
+                pprint.pprint(body)
         except urllib.error.HTTPError as err:
             print(err)
         except urllib.error.URLError as err:

@@ -59,8 +59,8 @@ class QuickReply():
                                     "label": "save",
                                     "data": "action=save",
                                     "displayText": "保存",
-                                    "inputOption": "openKeyboard",
-                                    "fillInText": "---\nName: \nPhone: \nBirthday: \n---"
+                                    # "inputOption": "openKeyboard",
+                                    # "fillInText": "---\nName: \nPhone: \nBirthday: \n---"
                                 }
                             }
                         ]

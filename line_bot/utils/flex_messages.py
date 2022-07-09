@@ -12,7 +12,6 @@ HEADER = {
     'Authorization': 'Bearer ' + ACCESSTOKEN
 }
 
-
 def make_contents(image_file, place_name, url_name):
     contents = {
         "type": "bubble",
@@ -52,8 +51,8 @@ def make_contents(image_file, place_name, url_name):
         }
     }
     contents["hero"]["url"] = image_file
-    contents["body"]["contents"]["text"] = place_name
-    contents["footer"]["contents"]["uri"] = url_name
+    contents["body"]["contents"][0]["text"] = place_name
+    contents["footer"]["contents"][0]["uri"] = url_name
     
     return contents
 

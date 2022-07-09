@@ -35,6 +35,7 @@ status
 @csrf_exempt
 def index_view(request):
     print("REQUEST:", request)
+    print(f"event_type:{event_type}")
     if request.method == 'POST':
         request = json.loads(request.body.decode('utf-8'))
         print("request:")
@@ -50,7 +51,6 @@ def index_view(request):
             # post_back = data["postback"]
             # post_back_data = post_back["data"]
             
-
 
             select_category = CategorySelect()
             select_category.CS_reply_register(reply_token)
@@ -247,6 +247,7 @@ def db_register_url_start(reply_token,message):
 def db_register_url_start_place(reply_token,message):
     status = Status.objects.get(status=4)
     status.status = 5
+    status.save()
     place_data = Place.objects.get(id=status.place_id)
     place_data.name = message['text']
     place_data.save()

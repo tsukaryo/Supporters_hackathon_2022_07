@@ -11,8 +11,6 @@ import os
 
 @csrf_exempt
 def index_view(request):
-    global keep_status,id
-    print("KEEP_STATUS IS", keep_status, "NOW.")
     if request.method == 'POST':
         request = json.loads(request.body.decode('utf-8'))
         print("request:")
@@ -47,7 +45,6 @@ def index_view(request):
         elif Status.objects.filter(status=1):
             s = Status.objects.get(status=1)
             s.status = 2
-            print("keep_status==1に入りました")
             recieved_name_text = message['text']
             d = Place.objects.create(name=recieved_name_text,url="default")
             print("名前をデータベースに登録しました")

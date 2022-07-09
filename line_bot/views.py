@@ -84,11 +84,11 @@ def index_view(request):
         elif Status.objects.filter(status=2):
             s = Status.objects.get(status=2)
             s.status = 0
-            s.save()
             recieved_url = message['text']
             print("keep_status==2に入りました。")
             print("after id : "+ str(id))
-            p = Place.objects.get(id=id)
+            p = Place.objects.get(id=s.id)
+            s.save()
             print(f"名前と一致するidをデータベースから入手しました。ちなみにidは{p}です")
             p.url = recieved_url
             p.save()

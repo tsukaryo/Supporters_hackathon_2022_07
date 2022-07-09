@@ -14,7 +14,8 @@ status
 0:終わり（特に関係なし）
 1:場所の名前入力待ち
 2:場所のURL入力まち
-3:場所の名前待ち(URLスタートの時)
+3:「行きたい」待ち(URLスタートの時)
+4:場所の入力待ち
 """
 
 @csrf_exempt
@@ -31,13 +32,13 @@ def index_view(request):
         if message['text'][:5] == "https":
             #「行きたい」というワード待ちのステータスを立ち上げる
             place_data = Place.objects.create(name="default",url=message['text'])
-            Status.object.create(status=3,place_id=place_data.id)
+            Status.objects.create(status=3,place_id=place_data.id)
             return HttpResponse("ok")
 
         # 「保存して」とメッセージが送られた時
         if message['text'] == "クイック":
             line_quickreply_send = QuickReply(message_creater.create_single_text_message("test"))
-            line_quickreply_send.reply(reply_token)
+            line_quickreply_send.quickreply(reply_token)
             return HttpResponse("ok")
 
         # 「保存して」とメッセージが送られた時
@@ -48,6 +49,11 @@ def index_view(request):
         # 「表示して」とメッセージが送られた時
         elif message['text'] == "表示して":
             place_display(reply_token)
+            return HttpResponse("ok")
+
+        # 「リセットして」とメッセージが送られた時
+        elif message['text'] == "リセットして":
+            db_reset(reply_token)
             return HttpResponse("ok")
         
         # 保存したい場所の名前を取得した時
@@ -63,12 +69,15 @@ def index_view(request):
         # URLが送られてきた後に"行きたい"というメッセージが来た時
         elif  Status.objects.filter(status=3):
             if "行きたい" in message['text']:
-                db_register_name(reply_token,message)
+                db_register_url_start(reply_token,message)
                 return HttpResponse("ok")
             else:
                 status = Status.objects.filter(status=3)
                 status.status = 0
             
+        elif Status.objects.filter(status=4):
+            db_register_url_start_place(reply_token,message)
+            return HttpResponse("ok")
             
     return HttpResponse("ok")
 
@@ -90,6 +99,12 @@ def place_display(reply_token):
         place_name += p.name + "\n"
     line_message_output = LineMessage(message_creater.create_single_text_message(place_name))
     line_message_output.reply(reply_token)
+    return 0
+
+def db_reset(reply_token):
+    #place = Place.objects.all() #全削除
+    place = Place.objects.get(name = "名前1") #一部だけ削除
+    place.delete()
     return 0
 
 def db_register_name(reply_token,message):
@@ -134,6 +149,16 @@ def db_register_url_start(reply_token,message):
     line_message_send_name.reply(reply_token)
     return 0
 
+def db_register_url_start_place(reply_token,message):
+    status = Status.objects.get(status=4)
+    status.status = 0
+    place_data = Place.objects.get(id=status.place_id)
+    place_data.name = message['text']
+    place_data.save()
+    send_text_place = "保存しました"
+    line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
+    line_message_send_name.reply(reply_token)
+    return 0
 
 ## Flexmessageで返す
 # @handler.add(MessageEvent, message=TextMessage)

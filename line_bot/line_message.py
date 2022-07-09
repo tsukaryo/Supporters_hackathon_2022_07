@@ -58,7 +58,9 @@ class QuickReply():
                                     "type": "postback",
                                     "label": "save",
                                     "data": "action=save",
-                                    "displayText": "保存"
+                                    "displayText": "保存",
+                                    "inputOption": "openKeyboard",
+                                    "fillInText": "---\nName: \nPhone: \nBirthday: \n---"
                                 }
                             }
                         ]
@@ -66,6 +68,7 @@ class QuickReply():
                 }
             ]
         }
+
         req = urllib.request.Request(REPLY_ENDPOINT_URL, json.dumps(body).encode(), HEADER)
         try:
             with urllib.request.urlopen(req) as res:

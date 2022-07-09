@@ -73,8 +73,8 @@ def index_view(request):
             line_message_send = LineMessage(message_creater.create_single_text_message(send_text))
             line_message_send.reply(reply_token)
             s.place_id = d.id
+            print("before id : "+ str(s.place_id))
             s.save()
-            print("before id : "+ str(id))
             # with open(status_file_path, mode='w') as f:
             #     f.write("2")
             # keep_status = 2
@@ -86,8 +86,8 @@ def index_view(request):
             s.status = 0
             recieved_url = message['text']
             print("keep_status==2に入りました。")
-            print("after id : "+ str(id))
-            p = Place.objects.get(id=s.id)
+            print("after id : "+ str(s.place_id))
+            p = Place.objects.get(id=s.place_id)
             s.save()
             print(f"名前と一致するidをデータベースから入手しました。ちなみにidは{p}です")
             p.url = recieved_url

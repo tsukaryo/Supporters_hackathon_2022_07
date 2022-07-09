@@ -59,14 +59,17 @@ def index_view(request):
             line_message_send = LineMessage(message_creater.create_single_text_message(send_text))
             line_message_send.reply(reply_token)
             id = d.id
+            print("before id : "+ str(id))
             keep_status = 2
             return HttpResponse("ok")
         
         elif keep_status == 2:
+            recieved_url = message['text']
             print("keep_status==2に入りました。")
+            print("after id : "+ str(id))
             p = Place.objects.get(id == id)
             print(f"名前と一致するidをデータベースから入手しました。ちなみにidは{p}です")
-            p.url = line_message
+            p.url = recieved_url
             p.save()
             print("urlをデータベースに登録しました")
             send_text_place = "保存しました"

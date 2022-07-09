@@ -4,6 +4,7 @@ import urllib.request
 import json
 
 REPLY_ENDPOINT_URL = "https://api.line.me/v2/bot/message/reply"
+CHANNEL_SECRET = "4767dec262d22735f5d4f085c7800bcd"
 ACCESSTOKEN = 'BSLzDq5+3GTnn2uBODxBRI1mxDvzBsUF+mwwULR0CCF5x4MM5NlDeyOmqJdIA3Q2CR+XHqGRYV1b6FZuRTFK6HYqZkiVKXYOiXT5baAySnLLtGuQ/bPHu6KU9DIMlJJUNUgxfFyZ3BVwm2FPy/WfKwdB04t89/1O/w1cDnyilFU='
 HEADER = {
     'Content-Type': 'application/json',
@@ -108,7 +109,13 @@ class URLMessage():
                     {  
                         "type":"uri",
                         "label":"Web",
-                        "uri":"https://classmethod.jp/"
+                        "linkUri":"https://classmethod.jp/",
+                        "area": {
+                            "x": 0,
+                            "y": 0,
+                            "width": 520,
+                            "height": 1040
+                            }
                     }
                         ]
         }

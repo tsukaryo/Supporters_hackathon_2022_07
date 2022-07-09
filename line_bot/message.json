@@ -29,15 +29,7 @@
               "contents": [
                 {
                   "type": "text",
-                  "text": "日付",
-                  "color": "#aaaaaa",
-                  "size": "sm",
-                  "flex": 1
-                },
-                {
-                  "type": "text",
-                  "text": "{{ date|date:"Y年m月d日"}}",
-                  "wrap": true,
+                  "text": "{{ text }}",
                   "color": "#666666",
                   "size": "sm",
                   "flex": 5

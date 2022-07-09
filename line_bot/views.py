@@ -52,7 +52,7 @@ def index_view(request):
             select_category = CategorySelect()
             select_category.CS_reply(reply_token)
             return HttpResponse("ok")
-            
+
         #event_type == message
         else:
             message = data['message']
@@ -83,7 +83,8 @@ def index_view(request):
                 
             # 「表示して」とメッセージが送られた時
             elif message['text'] == "表示して":
-                handle_message(reply_token,message)
+                select_category = CategorySelect()
+                select_category.CS_reply_show(reply_token)
                 return HttpResponse("ok")
             
 
@@ -178,7 +179,8 @@ def db_register_url(reply_token,message):
     status.save()
     place_data.save()
     send_text_place = "カテゴリーを入力してください"
-    line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
+    
+    line_message_send_name = QuickReply(message_creater.create_single_text_message(send_text_place))
     line_message_send_name.reply(reply_token)
     return 0
 
@@ -188,8 +190,8 @@ def db_register_category(reply_token,message):
     #登録し終えたので0に戻す
     status.status = 0
     received_category = message['text']
-    place_data = Place.objects.get(id=status.place_id)
     #categoryをデータベースに登録
+    place_data = Place.objects.get(id=status.place_id)
     place_data.category = received_category
     status.save()
     place_data.save()
@@ -198,6 +200,28 @@ def db_register_category(reply_token,message):
     line_message_send_name.reply(reply_token)
     return 0
 
+# def db_register_category(reply_token,message):
+#     status = Status.objects.get(status=5)
+#     print("keep_status==5に入りました。")
+#     #登録し終えたので0に戻す
+#     status.status = 0
+#     #quickreplyでカテゴリーを選択
+#     received_category = QuickReply()
+#     #categoryをデータベースに登録
+#     place_data = Place.objects.get(id=status.place_id)
+#     place_data.category = received_category
+#     status.save()
+#     place_data.save()
+#     send_text_place = "保存しました"
+#     line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
+#     line_message_send_name.reply(reply_token)
+#     return 0
+
+
+#テスト
+# line_quickreply_send = QuickReply()
+# line_quickreply_send.quickreply(reply_token)
+# return HttpResponse("ok")
 
 
 #URLスタートでdbへの保存をするとき
@@ -213,13 +237,15 @@ def db_register_url_start(reply_token,message):
 # URL始まりで場所が送られてきた時
 def db_register_url_start_place(reply_token,message):
     status = Status.objects.get(status=4)
-    status.status = 0
+    status.status = 5
     place_data = Place.objects.get(id=status.place_id)
     place_data.name = message['text']
     place_data.save()
-    send_text_place = "保存しました"
-    line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
-    line_message_send_name.reply(reply_token)
+    # send_text_place = "カテゴリを入力して"
+    # line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
+    select_category = CategorySelect()
+    select_category.CS_reply(reply_token)
+    # line_message_send_name.reply(reply_token)
     return 0
 
 # Flexmessageで表示

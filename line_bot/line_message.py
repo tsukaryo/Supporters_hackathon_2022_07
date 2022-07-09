@@ -49,18 +49,16 @@ class QuickReply():
                                 "action": {
                                     "type": "message",
                                     "label": "表示",
-                                    "text": "表示して"
+                                    "text": "表示して",
                                 }
                             },
                             {
                                 "type": "action",
                                 "action": {
                                     "type": "postback",
-                                    "label": "save",
+                                    "label": "保存",
                                     "data": "action=save",
                                     "displayText": "保存",
-                                    # "inputOption": "openKeyboard",
-                                    # "fillInText": "---\nName: \nPhone: \nBirthday: \n---"
                                 }
                             }
                         ]
@@ -82,7 +80,8 @@ class QuickReply():
 class CategorySelect():
     def __init__(self) -> None:
         pass
-    
+
+
     def CS_reply(self, reply_token):
         body = {
             'replyToken': reply_token,
@@ -95,8 +94,9 @@ class CategorySelect():
                             {
                                 "type": "action",
                                 "action": {
-                                    "type": "message",
+                                    "type": "postback",
                                     "label": "食事",
+                                    "data": "",
                                     "text": "食べに行きたいお店を登録"
                                 }
                             },
@@ -129,4 +129,50 @@ class CategorySelect():
             print(err)
         except urllib.error.URLError as err:
             print(err.reason)
-            
+
+        def CS_reply_show(self, reply_token):
+            body = {
+                'replyToken': reply_token,
+                "messages":[
+                    {
+                        "type": "text",
+                        "text": "カテゴリーを選択してね",
+                        "quickReply":{
+                            "items": [
+                                {
+                                    "type": "action",
+                                    "action": {
+                                        "type": "postback",
+                                        "label": "食事",
+                                        "text": "食べに行きたいお店を表示"
+                                    }
+                                },
+                                {
+                                    "type": "action",
+                                    "action": {
+                                        "type": "postback",
+                                        "label": "旅行",
+                                        "text": "行きたい場所を表示"
+                                    }
+                                },
+                                {
+                                    "type": "action",
+                                    "action": {
+                                        "type": "postback",
+                                        "label": "風俗",
+                                        "text": "行きたい風俗を表示"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+            req = urllib.request.Request(REPLY_ENDPOINT_URL, json.dumps(body).encode(), HEADER)
+            try:
+                with urllib.request.urlopen(req) as res:
+                    body = res.read()
+            except urllib.error.HTTPError as err:
+                print(err)
+            except urllib.error.URLError as err:
+                print(err.reason)

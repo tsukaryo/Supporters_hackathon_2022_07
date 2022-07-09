@@ -41,7 +41,6 @@ def index_view(request):
         pprint.pprint(request)
         data = request['events'][0]
         event_type = data['type']
-        print(f"event_type:{event_type}")
         reply_token = data['replyToken']
         
 
@@ -194,13 +193,13 @@ def db_register_category(reply_token,message):
     status.status = 0
     received_category = message['text']
     #quickreplyで選択情報の取得
-    # line_category_register = CategorySelect()
-    # line_category_register.CS_reply_register(reply_token)
-    # print(f"line_category_register:{line_category_register}")
+    line_category_register = CategorySelect()
+    line_category_register.CS_reply_register(reply_token)
+    print(f"line_category_register:{line_category_register}")
     
     #categoryをデータベースに登録
     place_data = Place.objects.get(id=status.place_id)
-    # place_data.category = line_category_register
+    #place_data.category = line_category_register
     place_data.category = received_category
     status.save()
     place_data.save()

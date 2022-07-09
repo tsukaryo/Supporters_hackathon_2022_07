@@ -31,8 +31,8 @@ class LineMessage():
             print(err.reason)
 
 class QuickReply():
-    def __init__(self, messages):
-        self.messages = messages
+    def __init__(self) -> None:
+        pass
     
     def quickreply(self, reply_token):
         body = {
@@ -40,23 +40,24 @@ class QuickReply():
             "messages":[
                 {
                     "type": "text",
-                    "text": "select URL or Name",
+                    # "text": "select URL or Name",
+                    "text": "表示または登録",
                     "quickReply":{
                         "items": [
                             {
                                 "type": "action",
                                 "action": {
                                     "type": "message",
-                                    "label": "URL",
-                                    "text": "Register URL first"
+                                    "label": "Display",
+                                    "text": "表示して"
                                 }
                             },
                             {
                                 "type": "action",
                                 "action": {
                                     "type": "message",
-                                    "label": "Name",
-                                    "text": "Register name first"
+                                    "label": "Regist",
+                                    "text": "登録して"
                                 }
                             }
                         ]

@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .utils import message_creater
 from .utils.flex_messages import FlexMessage
+from .utils.uri_message import URIMessage
 from .line_message import LineMessage,QuickReply,URLMessage
 from .models import Place,Status
 import os
@@ -52,13 +53,13 @@ def index_view(request):
 
          # 「web」と送られてきた時
         if message['text'] == "web":
-            line_urlreply_send = URLMessage(message_creater.create_single_text_message("test"))
+            line_urlreply_send = URIMessage(message_creater.create_single_text_message("test"))
             line_urlreply_send.reply(reply_token)
             return HttpResponse("ok")
 
         # 「クイック」とメッセージが送られた時
         if message['text'] == "クイック":
-            line_quickreply_send = QuickReply(message_creater.create_single_text_message("test"))
+            line_quickreply_send = QuickReply()
             line_quickreply_send.quickreply(reply_token)
             return HttpResponse("ok")
 
@@ -144,33 +145,34 @@ def db_register_name(reply_token,message):
 
 def db_register_url(reply_token,message):
     status = Status.objects.get(status=2)
-    #登録し終えたので0に戻す
-    status.status = 0
+    status.status = 5
     recieved_url = message['text']
     print("keep_status==2に入りました。")
     place_data = Place.objects.get(id=status.place_id)
     print(f"名前と一致するidをデータベースから入手しました。ちなみにidは{place_data.id}です")
+    #urlをデータベースに登録
     place_data.url = recieved_url
     status.save()
     place_data.save()
-    print("urlをデータベースに登録しました")
-    send_text_place = "保存しました"
+    send_text_place = "カテゴリーを入力してください"
     line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
     line_message_send_name.reply(reply_token)
     return 0
 
-# def db_register_category(reply_token,message):
-#     status = Status.objects.get(status=2)
-#     status.status = 5
-#     recieved_name_text = message['text']
-#     place_data = Place.objects.create(name=recieved_name_text,url="default")
-#     print("名前をデータベースに登録しました")
-#     send_text = "urlを入力してください"
-#     line_message_send = LineMessage(message_creater.create_single_text_message(send_text))
-#     line_message_send.reply(reply_token)
-#     status.place_id = place_data.id
-#     status.save()
-#     return 0
+def db_register_category(reply_token,message):
+    status = Status.objects.get(status=5)
+    #登録し終えたので0に戻す
+    status.status = 0
+    received_category = message['text']
+    place_data = Place.objects.get(id=status.place_id)
+    #categoryをデータベースに登録
+    place_data.category = received_category
+    status.save()
+    place_data.save()
+    send_text_place = "保存しました"
+    line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
+    line_message_send_name.reply(reply_token)
+    return 0
 
 
 

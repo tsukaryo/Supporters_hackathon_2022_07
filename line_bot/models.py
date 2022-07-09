@@ -5,7 +5,7 @@ from django.db import models
 class Place(models.Model):
     name = models.CharField(max_length=200)
     url = models.CharField(max_length=200,blank=True,null=True)
-    # category = models.CharField(max_length=200,default = "NoCategory")
+    category = models.CharField(max_length=200,default = "NoCategory")
 
     
 class Status(models.Model):

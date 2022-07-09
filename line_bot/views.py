@@ -43,6 +43,7 @@ def index_view(request):
         
         message = data['message']
         reply_token = data['replyToken']
+        type = data['type']
     
         # URLが送られてきた時
         if message['text'][:5] == "https":
@@ -62,6 +63,9 @@ def index_view(request):
             line_quickreply_send = QuickReply()
             line_quickreply_send.quickreply(reply_token)
             return HttpResponse("ok")
+
+        
+        #
 
         # 「保存して」とメッセージが送られた時
         if message['text'] == "保存して":
@@ -90,7 +94,7 @@ def index_view(request):
             return HttpResponse("ok")
 
         # 保存したい場所のカテゴリーを取得した時
-        elif Status.objects.filter(status=1):
+        elif Status.objects.filter(status=5):
             db_register_category(reply_token,message)
             return HttpResponse("ok")
 
@@ -107,6 +111,7 @@ def index_view(request):
         elif Status.objects.filter(status=4):
             db_register_url_start_place(reply_token,message)
             return HttpResponse("ok")
+        
             
     return HttpResponse("ok")
 
@@ -122,8 +127,10 @@ def db_register_start(reply_token):
 def place_display(reply_token):
     places = Place.objects.all()
     place_name = ""
+    place_url = ""
     for p in places:
         place_name += p.name + "\n"
+        place_url += p.name + "\n"
     line_message_output = LineMessage(message_creater.create_single_text_message(place_name))
     line_message_output.reply(reply_token)
     return 0

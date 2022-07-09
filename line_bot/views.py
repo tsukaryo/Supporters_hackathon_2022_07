@@ -124,8 +124,8 @@ def place_display(reply_token):
     return 0
 
 def db_reset(reply_token):
-    #place = Place.objects.all() #全削除
-    place = Place.objects.get(name = "名前1") #一部だけ削除
+    place = Place.objects.all() #全削除
+    #place = Place.objects.get(name = "名前1") #一部だけ削除
     place.delete()
     send_text = "リセットしました"
     return 0
@@ -206,8 +206,10 @@ def handle_message(reply_token,message):
     msg_text = "あなたの行きたい場所"
     places = Place.objects.all()
     place_name = ""
+    #place_url = ""
     for p in places:
         place_name += p.name + "\n"
+        #place_url += p.url + "\n"
     # output_placename = LineMessage(message_creater.create_single_text_message(place_name))
     line_message_send_name = FlexMessage(message_creater.create_single_text_message("test"))
     line_message_send_name.reply(reply_token)

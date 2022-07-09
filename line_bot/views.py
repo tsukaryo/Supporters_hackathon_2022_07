@@ -67,7 +67,7 @@ def index_view(request):
             recieved_url = message['text']
             print("keep_status==2に入りました。")
             print("after id : "+ str(id))
-            p = Place.objects.filter(id == id)
+            p = Place.objects.filter(id=id)
             print(f"名前と一致するidをデータベースから入手しました。ちなみにidは{p}です")
             p.url = recieved_url
             p.save()

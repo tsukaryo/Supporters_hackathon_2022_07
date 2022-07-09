@@ -7,3 +7,5 @@ class Place(models.Model):
     url = models.CharField(max_length=200,blank=True,null=True)
 
     
+class Status(models.Model):
+    status = models.IntegerField()

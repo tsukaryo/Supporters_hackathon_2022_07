@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .utils import message_creater
 from .line_message import LineMessage
-from .models import Place
+from .models import Place,Status
 import os
 
 # keep_status = 0
@@ -33,6 +33,7 @@ def index_view(request):
         # DBに保存するとき
         if message['text'] == "保存して":
             print("MESSAGE[TEXT] == 保存して")
+            Status.objects.create(status=1)
             # Place.objects.create(name='Taro', url='Hello, World!')
             #send message
             send_text = "名前を入力してください"
@@ -59,7 +60,11 @@ def index_view(request):
             line_message_output.reply(reply_token)
             return HttpResponse("ok")
         
-        elif keep_status == 1:
+        # elif keep_status == 1:
+        elif Status.objects.filter(status=1):
+            s = Status.objects.get(status=1)
+            s.status = 2
+            s.save()
             print("keep_status==1に入りました")
             recieved_name_text = message['text']
             d = Place.objects.create(name=recieved_name_text,url="default")
@@ -69,12 +74,16 @@ def index_view(request):
             line_message_send.reply(reply_token)
             id = d.id
             print("before id : "+ str(id))
-            with open(status_file_path, mode='w') as f:
-                f.write("2")
+            # with open(status_file_path, mode='w') as f:
+            #     f.write("2")
             # keep_status = 2
             return HttpResponse("ok")
         
-        elif keep_status == 2:
+        # elif keep_status == 2:
+        elif Status.objects.filter(status=2):
+            s = Status.objects.get(status=2)
+            s.status = 0
+            s.save()
             recieved_url = message['text']
             print("keep_status==2に入りました。")
             print("after id : "+ str(id))
@@ -87,8 +96,8 @@ def index_view(request):
             line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
             line_message_send_name.reply(reply_token)
 
-            with open(status_file_path, mode='w') as f:
-                f.write("0")
+            # with open(status_file_path, mode='w') as f:
+            #     f.write("0")
             # keep_status =0
             print("keep_status==0にリセット")
             return HttpResponse("ok")

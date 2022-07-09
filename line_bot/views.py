@@ -35,13 +35,13 @@ status
 @csrf_exempt
 def index_view(request):
     print("REQUEST:", request)
-    print(f"event_type:{event_type}")
     if request.method == 'POST':
         request = json.loads(request.body.decode('utf-8'))
         print("request:")
         pprint.pprint(request)
         data = request['events'][0]
         event_type = data['type']
+        print(f"event_type:{event_type}")
         reply_token = data['replyToken']
         
 

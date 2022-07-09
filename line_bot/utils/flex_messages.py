@@ -29,6 +29,11 @@ class FlexMessage():
                     "type": "flex",
                     "altText": "This is a Flex Message",
                     "contents": json_load
+                },
+                {
+                    "type": "flex",
+                    "altText": "This is a Flex Message",
+                    "contents": json_load
                 }
             ]
         }

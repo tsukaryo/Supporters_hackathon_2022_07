@@ -74,7 +74,8 @@ def index_view(request):
             else:
                 status = Status.objects.filter(status=3)
                 status.status = 0
-            
+        
+        #URLが送られて、行きたいが送られた後に場所が入力された時
         elif Status.objects.filter(status=4):
             db_register_url_start_place(reply_token,message)
             return HttpResponse("ok")
@@ -127,7 +128,7 @@ def db_register_url(reply_token,message):
     recieved_url = message['text']
     print("keep_status==2に入りました。")
     place_data = Place.objects.get(id=status.place_id)
-    print(f"名前と一致するidをデータベースから入手しました。ちなみにidは{p.id}です")
+    print(f"名前と一致するidをデータベースから入手しました。ちなみにidは{place_data.id}です")
     place_data.url = recieved_url
     status.save()
     place_data.save()

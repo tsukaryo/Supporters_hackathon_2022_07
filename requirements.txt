@@ -1,0 +1,13 @@
+Django==3.1
+mysqlclient
+sqlalchemy
+whitenoise
+pandas
+dj-database-url
+django-heroku
+gunicorn
+mecab-python3==0.996.5
+unidic-lite
+pysummarization
+wordcloud
+matplotlib

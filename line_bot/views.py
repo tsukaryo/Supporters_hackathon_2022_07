@@ -4,7 +4,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 
 from .utils import message_creater
-from .line_message import LineMessage,QuickReply
+from .line_message import LineMessage,QuickReply,URLMessage
 from .models import Place,Status
 import os
 import pprint
@@ -43,6 +43,12 @@ def index_view(request):
             #「行きたい」というワード待ちのステータスを立ち上げる
             place_data = Place.objects.create(name="default",url=message['text'])
             Status.objects.create(status=3,place_id=place_data.id)
+            return HttpResponse("ok")
+
+         # 「web」と送られてきた時
+        if message['text'] == "web":
+            line_quickreply_send = URLMessage(message_creater.create_single_text_message("test"))
+            line_quickreply_send.quickreply(reply_token)
             return HttpResponse("ok")
 
         # 「クイック」とメッセージが送られた時

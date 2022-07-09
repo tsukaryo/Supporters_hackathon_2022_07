@@ -36,58 +36,58 @@ class QuickReply():
     def quickreply(self, reply_token):
         body = {
             'replyToken': reply_token,
-            "messages":{
-                "type": "text",
-                "text": "select URL or Name",
-                "quickReply":{
-                    "items": [
-                        {
-                            "type": "action",
-                            "action": {
-                                "type": "message",
-                                "label": "URL",
-                                "text": "register_URL"
-                            }
-                        },
-                        {
-                            "type": "action",
-                            "action": {
-                                "type": "message",
-                                "label": "Name",
-                                "text": "register_name"
-                            }
-                        }
-                    ]
-                }
-            }
-            # "messages":[
-            #     {
-            #         "type": "text",
-            #         "text": "URLと名前どっち先に登録する?"
-            #     },
-            #     {
-            #         "quickReply":{
-            #             "items": [
-            #                 {
-            #                     "type": "action",
-            #                     "action": {
-            #                         "type": "message",
-            #                         "label": "URL",
-            #                         "text": "URLを先に登録"
-            #                     }
-            #                 },
-            #                 {
-            #                     "type": "action",
-            #                     "action": {
-            #                         "type": "message",
-            #                         "label": "Name",
-            #                         "text": "名前を先に登録"
-            #                     }
+            # "messages":{
+            #     "type": "text",
+            #     "text": "select URL or Name",
+            #     "quickReply":{
+            #         "items": [
+            #             {
+            #                 "type": "action",
+            #                 "action": {
+            #                     "type": "message",
+            #                     "label": "URL",
+            #                     "text": "register_URL"
             #                 }
-            #             ]
-            #         }
+            #             },
+            #             {
+            #                 "type": "action",
+            #                 "action": {
+            #                     "type": "message",
+            #                     "label": "Name",
+            #                     "text": "register_name"
+            #                 }
+            #             }
+            #         ]
             #     }
-            # ]
+            # }
+            "messages":[
+                {
+                    "type": "text",
+                    "text": "select URL or Name"
+                },
+                {
+                    "quickReply":{
+                        "items": [
+                            {
+                                "type": "action",
+                                "action": {
+                                    "type": "message",
+                                    "label": "URL",
+                                    "text": "Register URL first"
+                                }
+                            },
+                            {
+                                "type": "action",
+                                "action": {
+                                    "type": "message",
+                                    "label": "Name",
+                                    "text": "Register name first"
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
         }
         req = urllib.request.Request(REPLY_ENDPOINT_URL, json.dumps(body).encode(), HEADER)
         try:
@@ -98,3 +98,30 @@ class QuickReply():
         except urllib.error.URLError as err:
             print(err.reason)
             
+
+class URLMessage():
+    def __init__(self, messages):
+        self.messages = messages
+
+    def reply(self, reply_token):
+        body = {
+            'replyToken': reply_token,
+            'messages': {
+                [
+                    {  
+                        "type":"uri",
+                        "label":"Webを見る",
+                        "uri":"https://classmethod.jp/"
+                    }
+                ]
+                        }
+        }
+        print(body)
+        req = urllib.request.Request(REPLY_ENDPOINT_URL, json.dumps(body).encode(), HEADER)
+        try:
+            with urllib.request.urlopen(req) as res:
+                body = res.read()
+        except urllib.error.HTTPError as err:
+            print(err)
+        except urllib.error.URLError as err:
+            print(err.reason)

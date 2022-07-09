@@ -49,6 +49,9 @@ def index_view(request):
             print("EVENT:", data)
             # post_back = data["postback"]
             # post_back_data = post_back["data"]
+            
+
+
             select_category = CategorySelect()
             select_category.CS_reply_register(reply_token)
             return HttpResponse("ok")
@@ -189,15 +192,16 @@ def db_register_category(reply_token,message):
     print("keep_status==5に入りました。")
     #登録し終えたので0に戻す
     status.status = 0
-    #received_category = message['text']
+    received_category = message['text']
     #quickreplyで選択情報の取得
-    line_category_register = CategorySelect()
-    line_category_register.CS_reply(reply_token)
-    print(line_category_register)
+    # line_category_register = CategorySelect()
+    # line_category_register.CS_reply_register(reply_token)
+    # print(f"line_category_register:{line_category_register}")
     
     #categoryをデータベースに登録
     place_data = Place.objects.get(id=status.place_id)
-    place_data.category = line_category_register
+    # place_data.category = line_category_register
+    place_data.category = received_category
     status.save()
     place_data.save()
     send_text_place = "保存しました"
@@ -249,7 +253,7 @@ def db_register_url_start_place(reply_token,message):
     # send_text_place = "カテゴリを入力して"
     # line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
     select_category = CategorySelect()
-    select_category.CS_reply(reply_token)
+    select_category.CS_reply_register(reply_token)
     # line_message_send_name.reply(reply_token)
     return 0
 

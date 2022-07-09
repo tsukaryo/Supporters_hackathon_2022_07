@@ -82,7 +82,7 @@ class CategorySelect():
         pass
 
 
-    def CS_reply(self, reply_token):
+    def CS_reply_register(self, reply_token):
         body = {
             'replyToken': reply_token,
             "messages":[

@@ -15,9 +15,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.template.loader import render_to_string
 
-# from linebot import (LineBotApi, WebhookHandler)
-# from linebot.exceptions import (InvalidSignatureError, LineBotApiError)
-# from linebot.models import (MessageEvent, TextMessage, FlexSendMessage, BubbleContainer)
+from linebot import (LineBotApi, WebhookHandler)
+from linebot.exceptions import (InvalidSignatureError, LineBotApiError)
+from linebot.models import (MessageEvent, TextMessage, FlexSendMessage, BubbleContainer)
+
 
 """
 status
@@ -35,6 +36,7 @@ def index_view(request):
         print("request:")
         pprint.pprint(request)
         data = request['events'][0]
+        
         message = data['message']
         reply_token = data['replyToken']
     
@@ -64,7 +66,7 @@ def index_view(request):
             
         # 「表示して」とメッセージが送られた時
         elif message['text'] == "表示して":
-            place_display(reply_token)
+            handle_message(data)
             return HttpResponse("ok")
 
         # 「リセットして」とメッセージが送られた時
@@ -97,8 +99,6 @@ def index_view(request):
             return HttpResponse("ok")
             
     return HttpResponse("ok")
-
-
 
 
 def db_register_start(reply_token):
@@ -182,15 +182,15 @@ def db_register_url_start_place(reply_token,message):
 
 # Flexmessageで表示
 # @handler.add(MessageEvent, message=TextMessage)
-# def handle_message(event):
-#     msg_text = "あなたの行きたい場所"
-#     places = Place.objects.all()
-#     place_name = ""
-#     for p in places:
-#         place_name += p.name + "\n"
-#     output_placename = LineMessage(message_creater.create_single_text_message(place_name))
-#     msg = render_to_string("message.json", {"text": msg_text, "place":output_placename })
-#     line_bot_api.reply_message(
-#         event.reply_token,
-#         FlexSendMessage(alt_text = msg_text, contents = json.loads(msg))
-#     )
+def handle_message(event):
+    msg_text = "あなたの行きたい場所"
+    places = Place.objects.all()
+    place_name = ""
+    for p in places:
+        place_name += p.name + "\n"
+    output_placename = LineMessage(message_creater.create_single_text_message(place_name))
+    msg = render_to_string("message.json", {"text": msg_text, "place":output_placename })
+    line_bot_api.reply_message(
+        event.reply_token,
+        FlexSendMessage(alt_text = msg_text, contents = json.loads(msg))
+    )

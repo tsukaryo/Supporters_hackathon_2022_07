@@ -104,15 +104,13 @@ class URLMessage():
     def reply(self, reply_token):
         body = {
             'replyToken': reply_token,
-            'messages': [{
-                
+            'messages': [
                     {  
                         "type":"uri",
                         "label":"Webを見る",
                         "uri":"https://classmethod.jp/"
                     }
-                
-                        }]
+                        ]
         }
         print(body)
         req = urllib.request.Request(REPLY_ENDPOINT_URL, json.dumps(body).encode(), HEADER)

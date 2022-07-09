@@ -185,9 +185,11 @@ def db_register_url(reply_token,message):
     status.save()
     place_data.save()
     send_text_place = "カテゴリーを入力してください"
+    line_message_send = LineMessage(message_creater.create_single_text_message(send_text))
+    line_message_send.reply(reply_token)
     
-    line_category_register = CategorySelect()
-    line_category_register.CS_reply_register(reply_token)
+    # line_category_register = CategorySelect()
+    # line_category_register.CS_reply_register(reply_token)
     return 0
 
 def db_register_category(reply_token,message):

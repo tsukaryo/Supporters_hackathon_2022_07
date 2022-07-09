@@ -33,7 +33,7 @@ def index_view(request):
         # DBに保存するとき
         if message['text'] == "保存して":
             print("MESSAGE[TEXT] == 保存して")
-            Status.objects.create(status=1)
+            Status.objects.create(status=1,place_id=0)
             # Place.objects.create(name='Taro', url='Hello, World!')
             #send message
             send_text = "名前を入力してください"

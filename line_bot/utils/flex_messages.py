@@ -16,11 +16,10 @@ current_dir = os.path.dirname(__file__) #このfileのあるディレクトリ�
 file_path = os.path.join(current_dir, "flexmessage.json")
 json_open = open(file_path, 'r')
 json_load = json.load(json_open)
+json_open.close()
 
 
-class FlexMessage():
-    def __init__(self, messages):
-        self.messages = messages
+class FlexMessage():  
 
     def reply(self, reply_token):
         body = {

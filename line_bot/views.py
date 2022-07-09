@@ -47,8 +47,8 @@ def index_view(request):
         #postbackしたとき
         if event_type == "postback":
             print("EVENT:", data)
-            # post_back = data["postback"]
-            # post_back_data = post_back["data"]
+            post_back = data["postback"]
+            post_back_data = post_back["data"]
             
 
             select_category = CategorySelect()
@@ -107,7 +107,8 @@ def index_view(request):
 
             # 保存したい場所のカテゴリーを取得した時
             elif Status.objects.filter(status=5):
-                db_register_category(reply_token,message)
+                select_category = CategorySelect()
+                select_category.CS_reply_register(reply_token)
                 return HttpResponse("ok")
 
             # URLが送られてきた後に"行きたい"というメッセージが来た時
@@ -183,7 +184,7 @@ def db_register_url(reply_token,message):
     send_text_place = "カテゴリーを入力してください"
     
     line_message_send_name = QuickReply(message_creater.create_single_text_message(send_text_place))
-    line_message_send_name.reply(reply_token)
+    line_message_send_name.quickreply(reply_token)
     return 0
 
 def db_register_category(reply_token,message):
@@ -198,8 +199,8 @@ def db_register_category(reply_token,message):
     print(f"line_category_register:{line_category_register}")
     
     #categoryをデータベースに登録
-    place_data = Place.objects.get(id=status.place_id)
-    #place_data.category = line_category_register
+    #place_data = Place.objects.get(id=status.place_id)
+    place_data.category = line_category_register
     place_data.category = received_category
     status.save()
     place_data.save()

@@ -69,8 +69,8 @@ def index_view(request):
             print("after id : "+ str(id))
             p = Place.objects.filter(id=id)
             print(f"名前と一致するidをデータベースから入手しました。ちなみにidは{p}です")
-            p.url = recieved_url
-            p.save()
+            p[0].url = recieved_url
+            p[0].save()
             print("urlをデータベースに登録しました")
             send_text_place = "保存しました"
             line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))

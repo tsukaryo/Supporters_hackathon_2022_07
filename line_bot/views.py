@@ -4,7 +4,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 
 from .utils import message_creater
-from .line_message import LineMessage,QuickReply,URLMessage
+from .line_message import LineMessage,QuickReply,URLMessage,Postback
 from .models import Place,Status
 import os
 import pprint
@@ -49,8 +49,8 @@ def index_view(request):
 
          # 「web」と送られてきた時
         if message['text'] == "web":
-            line_quickreply_send = URLMessage(message_creater.create_single_text_message("test"))
-            line_quickreply_send.reply(reply_token)
+            line_urlreply_send = URLMessage(message_creater.create_single_text_message("test"))
+            line_urlreply_send.reply(reply_token)
             return HttpResponse("ok")
 
         # 「クイック」とメッセージが送られた時
@@ -68,6 +68,14 @@ def index_view(request):
         elif message['text'] == "表示して":
             handle_message(data)
             return HttpResponse("ok")
+
+        # 「ポストバック」とメッセージが送られた時
+        elif message['text'] == "ポストバック":
+            line_quickreply_send = Postback(message_creater.create_single_text_message("test"))
+            line_quickreply_send.postback(reply_token)
+            return HttpResponse("ok")
+
+        
 
         # 「リセットして」とメッセージが送られた時
         elif message['text'] == "リセットして":
@@ -189,7 +197,7 @@ def handle_message(event):
     for p in places:
         place_name += p.name + "\n"
     output_placename = LineMessage(message_creater.create_single_text_message(place_name))
-    msg = render_to_string("message.json", {"text": msg_text, "place":output_placename })
+    msg = render_to_string("./message.json", {"text": msg_text, "place":output_placename })
     line_bot_api.reply_message(
         event.reply_token,
         FlexSendMessage(alt_text = msg_text, contents = json.loads(msg))

@@ -184,7 +184,7 @@ def db_register_url(reply_token,message):
     place_data.url = recieved_url
     status.save()
     place_data.save()
-    send_text_place = "カテゴリーを入力してください"
+    send_text = "カテゴリーを入力してください"
     line_message_send = LineMessage(message_creater.create_single_text_message(send_text))
     line_message_send.reply(reply_token)
     

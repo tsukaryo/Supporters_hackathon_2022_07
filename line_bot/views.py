@@ -64,7 +64,7 @@ def index_view(request):
         elif Status.objects.filter(status=1):
             s = Status.objects.get(status=1)
             s.status = 2
-            s.save()
+            
             print("keep_status==1に入りました")
             recieved_name_text = message['text']
             d = Place.objects.create(name=recieved_name_text,url="default")
@@ -72,7 +72,8 @@ def index_view(request):
             send_text = "urlを入力してください"
             line_message_send = LineMessage(message_creater.create_single_text_message(send_text))
             line_message_send.reply(reply_token)
-            id = d.id
+            s.place_id = d.id
+            s.save()
             print("before id : "+ str(id))
             # with open(status_file_path, mode='w') as f:
             #     f.write("2")

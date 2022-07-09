@@ -8,4 +8,5 @@ class Place(models.Model):
 
     
 class Status(models.Model):
+    place_id = models.IntegerField()
     status = models.IntegerField()

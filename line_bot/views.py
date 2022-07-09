@@ -6,9 +6,14 @@ from django.views.decorators.csrf import csrf_exempt
 from .utils import message_creater
 from .line_message import LineMessage
 from .models import Place
+import os
 
 keep_status = 0
 id = 0
+
+current_dir = os.path.dirname(__file__)
+status_file_name = "keep_status.txt"
+status_file_path = os.path.join(current_dir, "status_file", )
 
 @csrf_exempt
 def index_view(request):
@@ -67,10 +72,10 @@ def index_view(request):
             recieved_url = message['text']
             print("keep_status==2に入りました。")
             print("after id : "+ str(id))
-            p = Place.objects.filter(id=id)
+            p = Place.objects.get(id=id)
             print(f"名前と一致するidをデータベースから入手しました。ちなみにidは{p}です")
-            p[0].url = recieved_url
-            p[0].save()
+            p.url = recieved_url
+            p.save()
             print("urlをデータベースに登録しました")
             send_text_place = "保存しました"
             line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))

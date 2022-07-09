@@ -190,6 +190,11 @@ def db_register_category(reply_token,message):
     #登録し終えたので0に戻す
     status.status = 0
     received_category = message['text']
+    #quickreplyで選択情報の取得
+    line_quickreply_send = QuickReply()
+    line_quickreply_send.quickreply(reply_token)
+    print(line_quickreply_send)
+    
     #categoryをデータベースに登録
     place_data = Place.objects.get(id=status.place_id)
     place_data.category = received_category

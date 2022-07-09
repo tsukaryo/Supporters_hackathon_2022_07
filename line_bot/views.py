@@ -51,7 +51,7 @@ def index_view(request):
         elif keep_status == 1:
             print("keep_status==1に入りました")
             recieved_name_text = message['text']
-            d = Place.objects.create(name=recieved_name_text)
+            d = Place.objects.create(name=recieved_name_text,url="default")
             print("名前をデータベースに登録しました")
             send_text = "urlを入力してください"
             line_message_send = LineMessage(message_creater.create_single_text_message(send_text))

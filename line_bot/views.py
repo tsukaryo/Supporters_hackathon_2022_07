@@ -15,9 +15,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.template.loader import render_to_string
 
-from linebot import (LineBotApi, WebhookHandler)
-from linebot.exceptions import (InvalidSignatureError, LineBotApiError)
-from linebot.models import (MessageEvent, TextMessage, FlexSendMessage, BubbleContainer)
+# from linebot import (LineBotApi, WebhookHandler)
+# from linebot.exceptions import (InvalidSignatureError, LineBotApiError)
+# from linebot.models import (MessageEvent, TextMessage, FlexSendMessage, BubbleContainer)
 
 """
 status
@@ -175,16 +175,16 @@ def db_register_url_start_place(reply_token,message):
     return 0
 
 # Flexmessageで表示
-@handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    msg_text = "あなたの行きたい場所"
-    places = Place.objects.all()
-    place_name = ""
-    for p in places:
-        place_name += p.name + "\n"
-    output_placename = LineMessage(message_creater.create_single_text_message(place_name))
-    msg = render_to_string("message.json", {"text": msg_text, "place":output_placename })
-    line_bot_api.reply_message(
-        event.reply_token,
-        FlexSendMessage(alt_text = msg_text, contents = json.loads(msg))
-    )
+# @handler.add(MessageEvent, message=TextMessage)
+# def handle_message(event):
+#     msg_text = "あなたの行きたい場所"
+#     places = Place.objects.all()
+#     place_name = ""
+#     for p in places:
+#         place_name += p.name + "\n"
+#     output_placename = LineMessage(message_creater.create_single_text_message(place_name))
+#     msg = render_to_string("message.json", {"text": msg_text, "place":output_placename })
+#     line_bot_api.reply_message(
+#         event.reply_token,
+#         FlexSendMessage(alt_text = msg_text, contents = json.loads(msg))
+#     )

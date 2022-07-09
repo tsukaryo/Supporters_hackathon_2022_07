@@ -48,7 +48,7 @@ class QuickReply():
                                 "type": "action",
                                 "action": {
                                     "type": "message",
-                                    "label": "Display",
+                                    "label": "表示",
                                     "text": "表示して"
                                 }
                             },
@@ -56,8 +56,8 @@ class QuickReply():
                                 "type": "action",
                                 "action": {
                                     "type": "message",
-                                    "label": "Regist",
-                                    "text": "登録して"
+                                    "label": "保存",
+                                    "text": "保存して"
                                 }
                             }
                         ]

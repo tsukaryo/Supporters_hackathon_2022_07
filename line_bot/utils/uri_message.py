@@ -21,7 +21,7 @@ class URIMessage():
                 "messages": [
                     {
                         "type": "imagemap",
-                        "baseUrl": "https://1.bp.blogspot.com/--L0axHlIFJ0/X0B4RtkgVQI/AAAAAAABarM/3S2zDdrLpFo6OsoPfo3_IdYZt0RIZuFVACNcBGAsYHQ/s1600/otaku_girl_fashion_penlight.png",
+                        "baseUrl": "https://thumb.photo-ac.com/8b/8b798ae586823bf467143e883c863f7a_w.jpeg",
                         "altText": "This is an imagemap",
                         "baseSize": {
                             "width": 1040,
@@ -30,7 +30,7 @@ class URIMessage():
                         "actions": [
                             {
                         "type": "uri",
-                        "linkUri": "https://example.com/",
+                        "linkUri": "https://developers.line.biz/ja/reference/messaging-api/#imagemap-action-objects",
                         "area": {
                             "x": 0,
                             "y": 586,

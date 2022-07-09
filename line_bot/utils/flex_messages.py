@@ -3,6 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 import urllib.request
 import json
 import os
+import pprint
 # from .flex_message_contents import make_contents, make_flex_contents 
 REPLY_ENDPOINT_URL = "https://api.line.me/v2/bot/message/reply"
 CHANNEL_SECRET = "4767dec262d22735f5d4f085c7800bcd"
@@ -42,9 +43,9 @@ def make_contents(image_file, place_name, url_name):
             {
                 "type": "button",
                 "action": {
-                "type": "uri",
-                "label": "WEBSITE",
-                "uri": "" #ここにURL
+                    "type": "uri",
+                    "label": "WEBSITE",
+                    "uri": "" #ここにURL
                 }
             }
             ]
@@ -52,7 +53,7 @@ def make_contents(image_file, place_name, url_name):
     }
     contents["hero"]["url"] = image_file
     contents["body"]["contents"][0]["text"] = place_name
-    contents["footer"]["contents"][0]["uri"] = url_name
+    contents["footer"]["contents"][0]["action"]["uri"] = url_name
     
     return contents
 
@@ -90,7 +91,7 @@ class FlexMessage():
                 }
             ]
         }
-        print(body)
+        pprint.pprint(body)
         req = urllib.request.Request(REPLY_ENDPOINT_URL, json.dumps(body).encode(), HEADER)
         try:
             with urllib.request.urlopen(req) as res:

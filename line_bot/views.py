@@ -69,7 +69,7 @@ def index_view(request):
             
         # 「表示して」とメッセージが送られた時
         elif message['text'] == "表示して":
-            handle_message(data)
+            handle_message(reply_token,message)
             return HttpResponse("ok")
         
 
@@ -159,18 +159,18 @@ def db_register_url(reply_token,message):
     line_message_send_name.reply(reply_token)
     return 0
 
-def db_register_category(reply_token,message):
-    status = Status.objects.get(status=1)
-    status.status = 3
-    recieved_name_text = message['text']
-    place_data = Place.objects.create(name=recieved_name_text,url="default")
-    print("名前をデータベースに登録しました")
-    send_text = "urlを入力してください"
-    line_message_send = LineMessage(message_creater.create_single_text_message(send_text))
-    line_message_send.reply(reply_token)
-    status.place_id = place_data.id
-    status.save()
-    return 0
+# def db_register_category(reply_token,message):
+#     status = Status.objects.get(status=2)
+#     status.status = 5
+#     recieved_name_text = message['text']
+#     place_data = Place.objects.create(name=recieved_name_text,url="default")
+#     print("名前をデータベースに登録しました")
+#     send_text = "urlを入力してください"
+#     line_message_send = LineMessage(message_creater.create_single_text_message(send_text))
+#     line_message_send.reply(reply_token)
+#     status.place_id = place_data.id
+#     status.save()
+#     return 0
 
 
 

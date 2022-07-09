@@ -22,14 +22,15 @@ json_open.close()
 class FlexMessage(): 
     def __init__(self):
         self.contents = {}
+        self.contents_list = []
     
     def make_content_dict(self, image_file, place_name, url_name):
         content_dict = make_contents(image_file, place_name, url_name)
-        return content_dict
+        self.contents_list.append(content_dict)
+        return 0
     
-    def make_flex_massage_content_dict(self, contents_list):
-        contents_dict = make_flex_message_contents(contents_list)
-        self.contents = contents_dict
+    def make_flex_massage_content_dict(self):
+        self.contents = make_flex_message_contents(self.contents_list)
         return 0
 
     def reply(self, reply_token):

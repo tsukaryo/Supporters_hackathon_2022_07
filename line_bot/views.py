@@ -3,10 +3,10 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 
 from .utils import message_creater
-from .utils.flex_messages import FlexMessage
 from .line_message import LineMessage,CategorySelect
 from .models import Place,Status
 import pprint
+from .utils.flex_messages import FlexMessage
 
 import json
 from django.http import HttpResponse
@@ -60,8 +60,12 @@ def index_view(request):
             #表示のためのカテゴリが選ばれた場合
             elif post_back_data in recieved_data:
                 places = Place.objects.filter(category=post_back_data[0:2])
-                lex = FlexMessage()
-                lex.reply(reply_token)
+                image_file = "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png"
+                flex = FlexMessage()
+                for place in places:
+                    flex.make_content_dict(image_file,place.name,place.url)
+                flex.make_flex_massage_content_dict()
+                flex.reply(reply_token)
 
                 return HttpResponse("ok")
 

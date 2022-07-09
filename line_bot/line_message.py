@@ -56,6 +56,7 @@ class QuickReply():
                                 "type": "action",
                                 "action": {
                                     "type": "postback",
+                                    "label": "save",
                                     "data": "action=save",
                                     "displayText": "保存"
                                 }

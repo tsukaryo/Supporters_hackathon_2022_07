@@ -186,8 +186,8 @@ def db_register_url(reply_token,message):
     place_data.save()
     send_text_place = "カテゴリーを入力してください"
     
-    line_message_send_name = QuickReply()
-    line_message_send_name.quickreply(reply_token)
+    line_category_register = CategorySelect()
+    line_category_register.CS_reply_register(reply_token)
     return 0
 
 def db_register_category(reply_token,message):

@@ -110,7 +110,7 @@ class CategorySelect():
                                 "action": {
                                     "type": "postback",
                                     "label": "旅行",
-                                    "data": "旅行_登録",
+                                    "data": "旅行",
                                     "displayText": "場所",
                                 }
                             },
@@ -120,7 +120,7 @@ class CategorySelect():
                                 "action": {
                                     "type": "postback",
                                     "label": "風俗",
-                                    "data": "風俗_登録",
+                                    "data": "風俗",
                                     "displayText": "風俗",
                                 }
                             }

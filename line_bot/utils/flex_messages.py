@@ -44,7 +44,7 @@ def make_contents(image_file, place_name, url_name):
                 "type": "button",
                 "action": {
                     "type": "uri",
-                    "label": "WEBSITE",
+                    "label": "リンク",
                     "uri": "" #ここにURL
                 }
             }
@@ -52,7 +52,7 @@ def make_contents(image_file, place_name, url_name):
         }
     }
     contents["hero"]["url"] = image_file
-    contents["body"]["contents"][0]["text"] = place_name
+    contents["body"]["contents"][0]["text"] += place_name
     contents["footer"]["contents"][0]["action"]["uri"] = url_name
     
     return contents

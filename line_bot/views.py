@@ -116,7 +116,10 @@ def index_view(request):
                     return HttpResponse("ok")
                 else:
                     status = Status.objects.filter(status=3)
+                    delete_place = Place.objects.get(id=status.place_id)
+                    delete_place.delete()
                     status.status = 0
+                    status.save()
             
             #URLが送られて、「行きたい」が送られた後に場所が入力された時
             elif Status.objects.filter(status=4):

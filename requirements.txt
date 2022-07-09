@@ -6,7 +6,6 @@ pandas
 dj-database-url
 django-heroku
 gunicorn
-mecab-python3==0.996.5
 unidic-lite
 pysummarization
 wordcloud

@@ -13,6 +13,7 @@ id = 0
 @csrf_exempt
 def index_view(request):
     global keep_status,id
+    print("KEEP_STATUS IS", keep_status, "NOW.")
     if request.method == 'POST':
         request = json.loads(request.body.decode('utf-8'))
         print("request:")
@@ -42,6 +43,7 @@ def index_view(request):
             places = Place.objects.all()
             print("PLACES = ",places)
             place_name = ""
+            print("place[0]: " + str(places[0]))
             for p in places:
                 place_name += p["name"] + "\n"
             line_message_output = LineMessage(message_creater.create_single_text_message(place_name))

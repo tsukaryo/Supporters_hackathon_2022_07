@@ -38,7 +38,7 @@ class QuickReply():
             'replyToken': reply_token,
             "messages":{
                 "type": "text",
-                "text": "URLと名前どっち先に登録する?",
+                "text": "select URL or Name",
                 "quickReply":{
                     "items": [
                         {
@@ -46,7 +46,7 @@ class QuickReply():
                             "action": {
                                 "type": "message",
                                 "label": "URL",
-                                "text": "URLを先に登録"
+                                "text": "register_URL"
                             }
                         },
                         {
@@ -54,12 +54,40 @@ class QuickReply():
                             "action": {
                                 "type": "message",
                                 "label": "Name",
-                                "text": "名前を先に登録"
+                                "text": "register_name"
                             }
                         }
                     ]
                 }
             }
+            # "messages":[
+            #     {
+            #         "type": "text",
+            #         "text": "URLと名前どっち先に登録する?"
+            #     },
+            #     {
+            #         "quickReply":{
+            #             "items": [
+            #                 {
+            #                     "type": "action",
+            #                     "action": {
+            #                         "type": "message",
+            #                         "label": "URL",
+            #                         "text": "URLを先に登録"
+            #                     }
+            #                 },
+            #                 {
+            #                     "type": "action",
+            #                     "action": {
+            #                         "type": "message",
+            #                         "label": "Name",
+            #                         "text": "名前を先に登録"
+            #                     }
+            #                 }
+            #             ]
+            #         }
+            #     }
+            # ]
         }
         req = urllib.request.Request(REPLY_ENDPOINT_URL, json.dumps(body).encode(), HEADER)
         try:

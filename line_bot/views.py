@@ -9,6 +9,16 @@ from .models import Place,Status
 import os
 import pprint
 
+import json, datetime
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+from django.template.loader import render_to_string
+
+from linebot import (LineBotApi, WebhookHandler)
+from linebot.exceptions import (InvalidSignatureError, LineBotApiError)
+from linebot.models import (MessageEvent, TextMessage, FlexSendMessage, BubbleContainer)
+
 """
 status
 0:終わり（特に関係なし）
@@ -35,7 +45,7 @@ def index_view(request):
             Status.objects.create(status=3,place_id=place_data.id)
             return HttpResponse("ok")
 
-        # 「保存して」とメッセージが送られた時
+        # 「クイック」とメッセージが送られた時
         if message['text'] == "クイック":
             line_quickreply_send = QuickReply(message_creater.create_single_text_message("test"))
             line_quickreply_send.quickreply(reply_token)
@@ -75,7 +85,7 @@ def index_view(request):
                 status = Status.objects.filter(status=3)
                 status.status = 0
         
-        #URLが送られて、行きたいが送られた後に場所が入力された時
+        #URLが送られて、「行きたい」が送られた後に場所が入力された時
         elif Status.objects.filter(status=4):
             db_register_url_start_place(reply_token,message)
             return HttpResponse("ok")
@@ -106,6 +116,7 @@ def db_reset(reply_token):
     #place = Place.objects.all() #全削除
     place = Place.objects.get(name = "名前1") #一部だけ削除
     place.delete()
+    send_text = "リセットしました"
     return 0
 
 def db_register_name(reply_token,message):
@@ -145,11 +156,13 @@ def db_register_url(reply_token,message):
 def db_register_url_start(reply_token,message):
     status = Status.objects.get(status=3)
     status.status = 4
+    status.save()
     send_text_place = "行きたい場所の名前はなんですか"
     line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
     line_message_send_name.reply(reply_token)
     return 0
 
+# URL始まりで場所が送られてきた時
 def db_register_url_start_place(reply_token,message):
     status = Status.objects.get(status=4)
     status.status = 0
@@ -161,17 +174,17 @@ def db_register_url_start_place(reply_token,message):
     line_message_send_name.reply(reply_token)
     return 0
 
-## Flexmessageで返す
-# @handler.add(MessageEvent, message=TextMessage)
-# def handle_message(event):
-#     msg_text = "あなたの行きたい場所"
-#     places = Place.objects.all()
-#     place_name = ""
-#     for p in places:
-#         place_name += p.name + "\n"
-#     output_placename = LineMessage(message_creater.create_single_text_message(place_name))
-#     msg = render_to_string("message.json", {"text": msg_text, "place":output_placename })
-#     line_bot_api.reply_message(
-#         event.reply_token,
-#         FlexSendMessage(alt_text = msg_text, contents = json.loads(msg))
-#     )
+# Flexmessageで表示
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    msg_text = "あなたの行きたい場所"
+    places = Place.objects.all()
+    place_name = ""
+    for p in places:
+        place_name += p.name + "\n"
+    output_placename = LineMessage(message_creater.create_single_text_message(place_name))
+    msg = render_to_string("message.json", {"text": msg_text, "place":output_placename })
+    line_bot_api.reply_message(
+        event.reply_token,
+        FlexSendMessage(alt_text = msg_text, contents = json.loads(msg))
+    )

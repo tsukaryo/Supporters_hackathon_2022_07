@@ -11,8 +11,8 @@ keep_status = 0
 id = 0
 
 @csrf_exempt
-def index_view(request):
-    global keep_status,id
+def index_view(request,keep_status,id):
+    # global keep_status,id
     print("KEEP_STATUS IS", keep_status, "NOW.")
     if request.method == 'POST':
         request = json.loads(request.body.decode('utf-8'))
@@ -35,7 +35,7 @@ def index_view(request):
             #change keep_status = 1
             keep_status = 1
             print("KEEP_STATUS(GLOBAL):", keep_status)
-            return HttpResponse("ok")
+            return HttpResponse("ok"),keep_status,id
             
         # DBの情報を表示するとき
         elif message['text'] == "表示して":
@@ -48,7 +48,7 @@ def index_view(request):
                 place_name += p["name"] + "\n"
             line_message_output = LineMessage(message_creater.create_single_text_message(place_name))
             line_message_output.reply(reply_token)
-            return HttpResponse("ok")
+            return HttpResponse("ok"),keep_status,id
         
         elif keep_status == 1:
             print("keep_status==1に入りました")
@@ -60,7 +60,7 @@ def index_view(request):
             line_message_send.reply(reply_token)
             id = d.id
             keep_status = 2
-            return HttpResponse("ok")
+            return HttpResponse("ok"),keep_status,id
         
         elif keep_status == 2:
             print("keep_status==2に入りました。")
@@ -74,8 +74,8 @@ def index_view(request):
             line_message_send_name.reply(reply_token)
             keep_status =0
             print("keep_status==0にリセット")
-            return HttpResponse("ok")
+            return HttpResponse("ok"),keep_status,id
     
         print(line_message)
         
-    return HttpResponse("ok")
+    return HttpResponse("ok"),keep_status,id

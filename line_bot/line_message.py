@@ -147,6 +147,7 @@ class CategorySelect():
                         "items": [
                             {
                                 "type": "action",
+                                #"imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLUpo7nGeeYZn83C2pxHEP3Mu76CKwJ84JvCrEgjKzBVfInjko_cA9I1f5qAsN23AlIXTrOqY6ymL660GY_QXNS-frllXepApgnTTW3jklnxMiU4k0_J2bX16SOYgfMlHTR_FAmNX1JJBbAfwYDC0CK50A=s256-no?authuser=0",
                                 "action": {
                                     "type": "postback",
                                     "label": "食事",
@@ -156,6 +157,7 @@ class CategorySelect():
                             },
                             {
                                 "type": "action",
+                                #"imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLW9eV0umcXblTMmLEx4PUoRKQ0JEMwLhqroEXxJg5QziilhPI_S0Xjrlr7yL6NgW2i1tOOLXsPEC4PcEdSa6ue1JVTR39tPZQnVdfVTBMqmN9jLzPFc3-fgi8i6OwKpGQegsInLMs86l8X7UjKLHBePiQ=s256-no?authuser=0",
                                 "action": {
                                     "type": "postback",
                                     "label": "旅行",
@@ -165,6 +167,7 @@ class CategorySelect():
                             },
                             {
                                 "type": "action",
+                                #"imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLW5tB5SJsx3YghIDwBBKzPhdzcC--mcLe6w-4kLbtAn_ACps51RQH0EmCwB5UO9etoVRZsNx1AgtqBPkBeXVTbQ8x-bCqtNnPLTNEUsPzXtsXLxJlDsUlc6mAgRtlmKn66ypSC-smcEu3SHk-tDCDrmUA=s256-no?authuser=0",
                                 "action": {
                                     "type": "postback",
                                     "label": "風俗",

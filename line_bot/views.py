@@ -13,7 +13,6 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import re
 
-
 """
 status
 0:終わり（特に関係なし）
@@ -67,8 +66,6 @@ def index_view(request):
                 return HttpResponse("ok")
 
         #表示用のカテゴリをpostbackした時
-
-            
 
         #event_type == message
         else:

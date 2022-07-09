@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .utils import message_creater
 from .utils.flex_messages import FlexMessage
 from .utils.uri_message import URIMessage
-from .line_message import LineMessage,QuickReply
+from .line_message import LineMessage,QuickReply,CategorySelect
 from .models import Place,Status
 import os
 import pprint
@@ -40,80 +40,89 @@ def index_view(request):
         print("request:")
         pprint.pprint(request)
         data = request['events'][0]
-        
-        message = data['message']
+        event_type = data['type']
         reply_token = data['replyToken']
-        type = data['type']
-    
-        # URLが送られてきた時
-        if message['text'][:5] == "https":
-            #「行きたい」というワード待ちのステータスを立ち上げる
-            place_data = Place.objects.create(name="default",url=message['text'])
-            Status.objects.create(status=3,place_id=place_data.id)
-            return HttpResponse("ok")
-
-         # 「web」と送られてきた時
-        if message['text'] == "web":
-            line_urlreply_send = URIMessage(message_creater.create_single_text_message("test"))
-            line_urlreply_send.reply(reply_token)
-            return HttpResponse("ok")
-
-        # 「クイック」とメッセージが送られた時
-        if message['text'] == "クイック":
-            line_quickreply_send = QuickReply()
-            line_quickreply_send.quickreply(reply_token)
-            return HttpResponse("ok")
-
         
-        #
 
-        # 「保存して」とメッセージが送られた時
-        if message['text'] == "保存して":
-            db_register_start(reply_token)
+        #postbackしたとき
+        if event_type == "postback":
+            print("EVENT:", data)
+            # post_back = data["postback"]
+            # post_back_data = post_back["data"]
+            select_category = CategorySelect()
+            select_category.CS_reply(reply_token)
             return HttpResponse("ok")
             
-        # 「表示して」とメッセージが送られた時
-        elif message['text'] == "表示して":
-            handle_message(reply_token,message)
-            return HttpResponse("ok")
-        
-
-        # 「リセットして」とメッセージが送られた時
-        elif message['text'] == "リセットして":
-            db_reset(reply_token)
-            return HttpResponse("ok")
-        
-        # 保存したい場所の名前を取得した時
-        elif Status.objects.filter(status=1):
-            db_register_name(reply_token,message)
-            return HttpResponse("ok")
-        
-        # 保存したい場所のURLを取得した時
-        elif Status.objects.filter(status=2):
-            db_register_url(reply_token,message)
-            return HttpResponse("ok")
-
-        # 保存したい場所のカテゴリーを取得した時
-        elif Status.objects.filter(status=5):
-            db_register_category(reply_token,message)
-            return HttpResponse("ok")
-
-        # URLが送られてきた後に"行きたい"というメッセージが来た時
-        elif  Status.objects.filter(status=3):
-            if "行きたい" in message['text']:
-                db_register_url_start(reply_token,message)
+        #event_type == message
+        else:
+            message = data['message']
+            # URLが送られてきた時
+            if message['text'][:5] == "https":
+                #「行きたい」というワード待ちのステータスを立ち上げる
+                place_data = Place.objects.create(name="default",url=message['text'])
+                Status.objects.create(status=3,place_id=place_data.id)
                 return HttpResponse("ok")
-            else:
-                status = Status.objects.filter(status=3)
-                status.status = 0
-        
-        #URLが送られて、「行きたい」が送られた後に場所が入力された時
-        elif Status.objects.filter(status=4):
-            db_register_url_start_place(reply_token,message)
-            return HttpResponse("ok")
-        
+
+            # 「web」と送られてきた時
+            if message['text'] == "web":
+                line_urlreply_send = URIMessage(message_creater.create_single_text_message("test"))
+                line_urlreply_send.reply(reply_token)
+                return HttpResponse("ok")
+
+            # 「クイック」とメッセージが送られた時
+            if message['text'] == "クイック":
+                line_quickreply_send = QuickReply()
+                line_quickreply_send.quickreply(reply_token)
+                return HttpResponse("ok")
+
+
+            # 「保存して」とメッセージが送られた時
+            if message['text'] == "保存して":
+                db_register_start(reply_token)
+                return HttpResponse("ok")
+                
+            # 「表示して」とメッセージが送られた時
+            elif message['text'] == "表示して":
+                handle_message(reply_token,message)
+                return HttpResponse("ok")
             
-    return HttpResponse("ok")
+
+            # 「リセットして」とメッセージが送られた時
+            elif message['text'] == "リセットして":
+                db_reset(reply_token)
+                return HttpResponse("ok")
+            
+            # 保存したい場所の名前を取得した時
+            elif Status.objects.filter(status=1):
+                db_register_name(reply_token,message)
+                return HttpResponse("ok")
+            
+            # 保存したい場所のURLを取得した時
+            elif Status.objects.filter(status=2):
+                db_register_url(reply_token,message)
+                return HttpResponse("ok")
+
+            # 保存したい場所のカテゴリーを取得した時
+            elif Status.objects.filter(status=5):
+                db_register_category(reply_token,message)
+                return HttpResponse("ok")
+
+            # URLが送られてきた後に"行きたい"というメッセージが来た時
+            elif  Status.objects.filter(status=3):
+                if "行きたい" in message['text']:
+                    db_register_url_start(reply_token,message)
+                    return HttpResponse("ok")
+                else:
+                    status = Status.objects.filter(status=3)
+                    status.status = 0
+            
+            #URLが送られて、「行きたい」が送られた後に場所が入力された時
+            elif Status.objects.filter(status=4):
+                db_register_url_start_place(reply_token,message)
+                return HttpResponse("ok")
+            
+                
+        return HttpResponse("ok")
 
 
 def db_register_start(reply_token):
@@ -175,6 +184,7 @@ def db_register_url(reply_token,message):
 
 def db_register_category(reply_token,message):
     status = Status.objects.get(status=5)
+    print("keep_status==5に入りました。")
     #登録し終えたので0に戻す
     status.status = 0
     received_category = message['text']

@@ -55,9 +55,61 @@ class QuickReply():
                             {
                                 "type": "action",
                                 "action": {
+                                    "type": "postback",
+                                    "data": "action=save",
+                                    "displayText": "保存"
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+        req = urllib.request.Request(REPLY_ENDPOINT_URL, json.dumps(body).encode(), HEADER)
+        try:
+            with urllib.request.urlopen(req) as res:
+                body = res.read()
+        except urllib.error.HTTPError as err:
+            print(err)
+        except urllib.error.URLError as err:
+            print(err.reason)
+
+
+class CategorySelect():
+    def __init__(self) -> None:
+        pass
+    
+    def CS_reply(self, reply_token):
+        body = {
+            'replyToken': reply_token,
+            "messages":[
+                {
+                    "type": "text",
+                    "text": "カテゴリーを選択してね",
+                    "quickReply":{
+                        "items": [
+                            {
+                                "type": "action",
+                                "action": {
                                     "type": "message",
-                                    "label": "保存",
-                                    "text": "保存して"
+                                    "label": "食事",
+                                    "text": "食べに行きたいお店を登録"
+                                }
+                            },
+                            {
+                                "type": "action",
+                                "action": {
+                                    "type": "message",
+                                    "label": "旅行",
+                                    "text": "行きたい場所を登録"
+                                }
+                            },
+                            {
+                                "type": "action",
+                                "action": {
+                                    "type": "message",
+                                    "label": "風俗",
+                                    "text": "行きたい風俗を登録"
                                 }
                             }
                         ]

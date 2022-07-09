@@ -3,8 +3,10 @@ from django.db import models
 # Create your models here.
 
 class Place(models.Model):
+    # category = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
     url = models.CharField(max_length=200,blank=True,null=True)
+    category = models.CharField(max_length=200,default = "NoCategory")
 
     
 class Status(models.Model):

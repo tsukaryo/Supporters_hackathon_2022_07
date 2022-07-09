@@ -4,7 +4,8 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 
 from .utils import message_creater
-from .line_message import LineMessage,QuickReply,URLMessage,Postback
+from .utils.flex_messages import FlexMessage
+from .line_message import LineMessage,QuickReply,URLMessage
 from .models import Place,Status
 import os
 import pprint
@@ -25,12 +26,14 @@ status
 0:終わり（特に関係なし）
 1:場所の名前入力待ち
 2:場所のURL入力まち
+5.場所のカテゴリ
 3:「行きたい」待ち(URLスタートの時)
 4:場所の入力待ち
 """
 
 @csrf_exempt
 def index_view(request):
+    print("REQUEST:", request)
     if request.method == 'POST':
         request = json.loads(request.body.decode('utf-8'))
         print("request:")
@@ -68,13 +71,6 @@ def index_view(request):
         elif message['text'] == "表示して":
             handle_message(data)
             return HttpResponse("ok")
-
-        # 「ポストバック」とメッセージが送られた時
-        elif message['text'] == "ポストバック":
-            line_quickreply_send = Postback(message_creater.create_single_text_message("test"))
-            line_quickreply_send.postback(reply_token)
-            return HttpResponse("ok")
-
         
 
         # 「リセットして」とメッセージが送られた時
@@ -163,7 +159,19 @@ def db_register_url(reply_token,message):
     line_message_send_name.reply(reply_token)
     return 0
 
-    
+def db_register_category(reply_token,message):
+    status = Status.objects.get(status=1)
+    status.status = 3
+    recieved_name_text = message['text']
+    place_data = Place.objects.create(name=recieved_name_text,url="default")
+    print("名前をデータベースに登録しました")
+    send_text = "urlを入力してください"
+    line_message_send = LineMessage(message_creater.create_single_text_message(send_text))
+    line_message_send.reply(reply_token)
+    status.place_id = place_data.id
+    status.save()
+    return 0
+
 
 
 #URLスタートでdbへの保存をするとき
@@ -189,16 +197,20 @@ def db_register_url_start_place(reply_token,message):
     return 0
 
 # Flexmessageで表示
+# line_bot_api = LineBotApi(channel_access_token=settings.ACCESSTOKEN)
+# handler = WebhookHandler(channel_secret=settings.CHANNEL_SECRET)
 # @handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
+def handle_message(reply_token,message):
     msg_text = "あなたの行きたい場所"
     places = Place.objects.all()
     place_name = ""
     for p in places:
         place_name += p.name + "\n"
-    output_placename = LineMessage(message_creater.create_single_text_message(place_name))
-    msg = render_to_string("./message.json", {"text": msg_text, "place":output_placename })
-    line_bot_api.reply_message(
-        event.reply_token,
-        FlexSendMessage(alt_text = msg_text, contents = json.loads(msg))
-    )
+    # output_placename = LineMessage(message_creater.create_single_text_message(place_name))
+    line_message_send_name = FlexMessage(message_creater.create_single_text_message("test"))
+    line_message_send_name.reply(reply_token)
+    # msg = render_to_string("./message.json", {"text": msg_text, "place":output_placename })
+    # line_bot_api.reply_message(
+    #     event.reply_token,
+    #     FlexSendMessage(alt_text = msg_text, contents = json.loads(msg))
+    # )

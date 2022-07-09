@@ -75,7 +75,7 @@ def index_view(request):
         else:
             message = data['message']
             # URLが送られてきた時
-            if message['text'][:5] == "https" and Status.objects.filter(status=2) == None:
+            if message['text'][:5] == "https" and Status.objects.filter(status=2).exists()==False:
                 #「行きたい」というワード待ちのステータスを立ち上げる
                 place_data = Place.objects.create(name="default",url=message['text'])
                 Status.objects.create(status=3,place_id=place_data.id)

@@ -8,12 +8,14 @@ from .line_message import LineMessage
 from .models import Place
 import os
 
-keep_status = 0
+# keep_status = 0
 id = 0
 
 current_dir = os.path.dirname(__file__)
 status_file_name = "keep_status.txt"
-status_file_path = os.path.join(current_dir, "status_file", )
+status_file_path = os.path.join(current_dir, "status", status_file_name)
+with open(status_file_path) as f:
+    keep_status = int(f.read())
 
 @csrf_exempt
 def index_view(request):
@@ -38,7 +40,9 @@ def index_view(request):
             line_message_send.reply(reply_token)
             
             #change keep_status = 1
-            keep_status = 1
+            # keep_status = 1
+            with open(status_file_path, mode='w') as f:
+                f.write("1")
             print("KEEP_STATUS(GLOBAL):", keep_status)
             return HttpResponse("ok")
             
@@ -65,7 +69,9 @@ def index_view(request):
             line_message_send.reply(reply_token)
             id = d.id
             print("before id : "+ str(id))
-            keep_status = 2
+            with open(status_file_path, mode='w') as f:
+                f.write("2")
+            # keep_status = 2
             return HttpResponse("ok")
         
         elif keep_status == 2:
@@ -80,7 +86,10 @@ def index_view(request):
             send_text_place = "保存しました"
             line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
             line_message_send_name.reply(reply_token)
-            keep_status =0
+
+            with open(status_file_path, mode='w') as f:
+                f.write("0")
+            # keep_status =0
             print("keep_status==0にリセット")
             return HttpResponse("ok")
     

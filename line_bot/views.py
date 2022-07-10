@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .utils import message_creater
 from .line_message import LineMessage,CategorySelect
-from .models import Place,Status
+from .models import Place,Status,Category
 import pprint
 from .utils.flex_messages import FlexMessage
 
@@ -154,8 +154,8 @@ def index_view(request):
                 db_register_url_start_detail(reply_token,message)
                 return HttpResponse("ok")
 
-            #「カテゴリーカテゴリー編集して」と送られてきた時
-            elif "編集して" in message['text']:
+            #「カテゴリー追加して」と送られてきた時
+            elif "追加して" in message['text']:
                 db_add_category(reply_token,message)
                 return HttpResponse("ok")
 
@@ -256,5 +256,7 @@ def db_register_url_start_detail(reply_token,message):
     line_message_send_name.reply(reply_token)
 
 def db_add_category(reply_token,message):
+    Category.objects.create(status=1,place_id=0)
+    
     return 0
     

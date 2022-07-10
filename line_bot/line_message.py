@@ -124,8 +124,8 @@ class Category_show():
         self.item_list.append(item)
         return 0
     
-    def reply(self):
-        self.body = make_quick_category_body(self.item_list)
+    def reply(self, reply_token):
+        self.body = make_quick_category_body(reply_token,self.item_list)
         req = urllib.request.Request(REPLY_ENDPOINT_URL, json.dumps(self.body).encode(), HEADER)
         try:
             with urllib.request.urlopen(req) as res:

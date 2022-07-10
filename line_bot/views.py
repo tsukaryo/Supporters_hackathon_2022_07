@@ -120,7 +120,7 @@ def index_view(request):
                 select_category = Category_show()
                 for cat in categories:
                     select_category.make_item_list(cat.category)
-                select_category.reply()
+                select_category.reply(reply_token)
 
                 return HttpResponse("ok")
             

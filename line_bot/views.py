@@ -46,7 +46,6 @@ def index_view(request):
             #登録のためのカテゴリが選ばれた場合
             if Status.objects.filter(status=5):
                 print("EVENT:", data)
-                
                 #post_back_dataを引数にカテゴリ表示する関数つくって
                 status = Status.objects.get(status=5)
                 status.status = 6
@@ -92,6 +91,7 @@ def index_view(request):
             if message['text'][:5] == "https" and Status.objects.filter(status=2).exists()==False:
                 #「行きたい」というワード待ちのステータスを立ち上げる
                 place_data = Place.objects.create(name="default",url=message['text'])
+                place_data.image = "https://s.wordpress.com/mshots/v1/" + message['text']
                 Status.objects.create(status=3,place_id=place_data.id)
                 return HttpResponse("ok")
 
@@ -256,7 +256,15 @@ def db_register_url_start_detail(reply_token,message):
     line_message_send_name.reply(reply_token)
 
 def db_add_category(reply_token,message):
-    Category.objects.create(status=1,place_id=0)
+    send_text = "追加したいカテゴリー名を入力してください"
+    line_message_send = LineMessage(message_creater.create_single_text_message(send_text))
+    Status.objects.create(status=1,place_id=0)
+    status = Status.objects.get(status=1)
+    status.status = 6
+    status.save()
+    line_message_send.reply(reply_token)
     
+
+
     return 0
     

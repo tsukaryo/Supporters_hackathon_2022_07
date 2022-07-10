@@ -3,7 +3,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 
 from .utils import message_creater
-from .line_message import LineMessage,CategorySelect,Category_Option
+from .line_message import LineMessage,Category_Option
 from .models import Place,Status,Category
 import pprint
 from .utils.flex_messages import FlexMessage

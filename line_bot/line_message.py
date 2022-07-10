@@ -92,7 +92,7 @@ def make_category_item(category_name):
         }
     
     item["action"]["label"] = category_name
-    item["action"]["data"] = category_name
+    item["action"]["data"] = category_name 
     item["action"]["displayText"] = category_name
     return item
 
@@ -118,6 +118,18 @@ class Category_show():
     def __init__(self):
         self.item_list = []
         self.body= {}
+        self.all_item = {
+            "type": "action",
+            "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLUcVu6uzRhfdsJ5_-S8FueUWdiFfzrhs4sJ5trdGjIA8OtO_uj5-N6XIh-TA7vDNCbddEYFQlt5QmHnorCEdXbIcG4R0WaCx19wvPocI1fuwlfZXNJodvDY0ysBw7sTvUqmweX-jV-ukVn5iU2SMB0WQQ=s256-no?authuser=0",
+            "action": {
+                "type": "postback",
+                "label": "ALL",#ここをcategory_nameで作成
+                "data": "ALL",#ここをcategory_nameで作成
+                "displayText": "全て",#ここをcategory_nameで作成
+            }
+        }
+
+        self.item_list.append(self.all_item)
     
     def make_item_list(self, category_name):
         item = make_category_item(category_name)

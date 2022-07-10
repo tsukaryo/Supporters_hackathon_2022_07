@@ -6,3 +6,13 @@
 ### LINEID:@533npcwc
 
 ##### 行きたい場所ややりたいことを友人とシェアして、保存しておき、いつでも呼び出せるbot
+
+
+
+#### 立ち上げかた
+```python:qiita.py
+git clone 
+docker-compose build
+docker-compose exec web python manage.py migrate
+docker-compose up
+```

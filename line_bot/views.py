@@ -90,8 +90,9 @@ def index_view(request):
             # URLが送られてきた時
             if message['text'][:5] == "https" and Status.objects.filter(status=2).exists()==False:
                 #「行きたい」というワード待ちのステータスを立ち上げる
-                place_data = Place.objects.create(name="default",url=message['text'])
-                place_data.image = "https://s.wordpress.com/mshots/v1/" + message['text']
+                place_data = Place.objects.create(name="default",url=message['text'],\
+                    image="https://s.wordpress.com/mshots/v1/" + message['text'])
+                
                 Status.objects.create(status=3,place_id=place_data.id)
                 return HttpResponse("ok")
 
@@ -158,6 +159,12 @@ def index_view(request):
             elif "追加して" in message['text']:
                 db_add_category(reply_token,message)
                 return HttpResponse("ok")
+            
+            #追加したいカテゴリーを入力した時
+            elif Status.objects.filter(status=7):
+                db_add_category(reply_token,mesasge)
+                return HttpResponse("ok")
+            
 
 
 
@@ -255,16 +262,20 @@ def db_register_url_start_detail(reply_token,message):
     line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
     line_message_send_name.reply(reply_token)
 
-def db_add_category(reply_token,message):
+def db_add_dec_category(reply_token,message):
     send_text = "追加したいカテゴリー名を入力してください"
     line_message_send = LineMessage(message_creater.create_single_text_message(send_text))
-    Status.objects.create(status=1,place_id=0)
-    status = Status.objects.get(status=1)
-    status.status = 6
-    status.save()
+    Status.objects.create(status=7,place_id=0)
     line_message_send.reply(reply_token)
-    
-
-
     return 0
     
+def db_add_category(reply_token,mesasge):
+    status = Status.objects.get(status=7)
+    status.status = 0
+    status.save()
+    recieved_category = message['text']
+    Category.objects.create(category=recieved_category)
+    
+
+    
+

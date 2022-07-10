@@ -114,8 +114,9 @@ def make_quick_category_body(reply_token,item_list):
     return body
 
 
-class Category_show(): 
+class Category_Button(): 
     def __init__(self):
+        #show init
         self.item_list = []
         self.body= {}
         self.all_item = {
@@ -130,7 +131,10 @@ class Category_show():
         }
 
         self.item_list.append(self.all_item)
+
+        #register init
     
+
     def make_item_list(self, category_name):
         item = make_category_item(category_name)
         self.item_list.append(item)

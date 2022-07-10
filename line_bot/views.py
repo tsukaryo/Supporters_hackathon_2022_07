@@ -3,7 +3,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 
 from .utils import message_creater
-from .line_message import LineMessage,CategorySelect,Category_show
+from .line_message import LineMessage,CategorySelect,Category_Option
 from .models import Place,Status,Category
 import pprint
 from .utils.flex_messages import FlexMessage
@@ -118,7 +118,7 @@ def index_view(request):
                 # select_category.CS_reply_show(reply_token)
                 categories = Category.objects.all()
 
-                select_category = Category_show()
+                select_category = Category_Option()
                 for cat in categories:
                     select_category.make_item_list(cat.category)
                 select_category.reply(reply_token)
@@ -249,8 +249,11 @@ def db_register_url(reply_token,message):
     place_data.image = "https://s.wordpress.com/mshots/v1/" + recieved_url
     status.save()
     place_data.save()
-    select_category = CategorySelect()
-    select_category.CS_reply_register(reply_token)
+    # select_category = CategorySelect()
+    # select_category.CS_reply_register(reply_token)
+
+    select_category = Category_Option()
+    select_category.reply(reply_token)
     return 0
 
 
@@ -272,8 +275,11 @@ def db_register_url_start_place(reply_token,message):
     place_data = Place.objects.get(id=status.place_id)
     place_data.name = message['text']
     place_data.save()
-    select_category = CategorySelect()
-    select_category.CS_reply_register(reply_token)
+    # select_category = CategorySelect()
+    # select_category.CS_reply_register(reply_token)
+
+    select_category = Category_Option()
+    select_category.reply(reply_token)
     return 0
 
 def db_register_url_start_detail(reply_token,message):

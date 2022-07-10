@@ -128,3 +128,28 @@ class Category_register():
         except urllib.error.URLError as err:
             print(err.reason)
         return 0
+
+def CS_reply_register(self, reply_token):
+        body = {
+            'replyToken': reply_token,
+            "messages":[
+                {
+                    "type": "text",
+                    "text": "カテゴリーを選択してね",
+                    "quickReply":{
+                        "items": [
+                            {
+                                "type": "action",
+                                "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLUcVu6uzRhfdsJ5_-S8FueUWdiFfzrhs4sJ5trdGjIA8OtO_uj5-N6XIh-TA7vDNCbddEYFQlt5QmHnorCEdXbIcG4R0WaCx19wvPocI1fuwlfZXNJodvDY0ysBw7sTvUqmweX-jV-ukVn5iU2SMB0WQQ=s256-no?authuser=0",
+                                "action": {
+                                    "type": "postback",
+                                    "label": "食事",
+                                    "data": "食事",
+                                    "displayText": "食事",
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }

@@ -230,7 +230,7 @@ def db_register_name(reply_token,message):
     status.status = 2
     recieved_name_text = message['text']
     place_data = Place.objects.create(name=recieved_name_text,url="default")
-    send_text = "urlを入力してください"
+    send_text = "URLを入力してください"
     line_message_send = LineMessage(message_creater.create_single_text_message(send_text))
     line_message_send.reply(reply_token)
     status.place_id = place_data.id
@@ -311,6 +311,9 @@ def db_add_category(reply_token,message):
     recieved_category = message['text']
     Category.objects.create(category=recieved_category)
     send_text_place = "カテゴリー追加しました"
+    line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
+    line_message_send_name.reply(reply_token)
+    send_text_place = "新たなカテゴリーを保存しました"
     line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
     line_message_send_name.reply(reply_token)
     return 0

@@ -124,6 +124,7 @@ class CategorySelect():
                                     "displayText": "風俗",
                                 }
                             }
+
                         ]
                     }
                 }
@@ -178,6 +179,16 @@ class CategorySelect():
                                     "label": "風俗",
                                     "data": "風俗_表示",
                                     "displayText": "行きたい風俗を表示",
+                                }
+                            },
+                            {
+                                "type": "action",
+                                "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLW6lsFpdAm3D2p-Lgscv6lU9VGSsMRnpE53JcMv6hmEXLzTC06lS9U1jPaKJejZVgvALHVvU5eENmCoriuGr892VcD6ZAF07d541Kc5eO3ztYij5daq0maBQYAv0v34Z_LXq41MXQ4r1AMmtF_KWxwThA=s256-no?authuser=0",
+                                "action": {
+                                    "type": "postback",
+                                    "label": "全て",
+                                    "data": "ALL_表示",
+                                    "displayText": "全てのカテゴリーを表示",
                                 }
                             }
                         ]

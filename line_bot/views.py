@@ -22,6 +22,7 @@ status
 3:「行きたい」待ち(URLスタートの時)
 4:場所の入力待ち
 6:詳細(detail)の入力まち
+7:カテゴリー編集
 """
 
 @csrf_exempt
@@ -41,7 +42,7 @@ def index_view(request):
             post_back = data["postback"]
             post_back_data = post_back["data"] #postbackのデータが入ってる
             
-            recieved_data = ["食事_表示","旅行_表示","風俗_表示"]
+            recieved_data = ["食事_表示","旅行_表示","風俗_表示","ALL_表示"]
             #登録のためのカテゴリが選ばれた場合
             if Status.objects.filter(status=5):
                 print("EVENT:", data)
@@ -58,17 +59,29 @@ def index_view(request):
                 line_message_send.reply(reply_token)
                 return HttpResponse("ok")
 
-            #表示のためのカテゴリが選ばれた場合
-            elif post_back_data in recieved_data:
+            #表示のためのカテゴリが選ばれた場合(all以外)
+            elif post_back_data in recieved_data[0:2]:
                 places = Place.objects.filter(category=post_back_data[0:2])
-                image_file = "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png"
+                # image_file = "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png"
                 flex = FlexMessage()
                 for place in places:
-                    flex.make_content_dict(image_file,place.name,place.url)
+                    flex.make_content_dict(place.image,place.name,place.url)
+                flex.make_flex_massage_content_dict()
+                flex.reply(reply_token)
+                return HttpResponse("ok")
+
+            #表示のためのカテゴリが選ばれた場合(all)
+            elif post_back_data == recieved_data[3]:
+                places = Place.objects.all()
+                # image_file = "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png"
+                flex = FlexMessage()
+                for place in places:
+                    flex.make_content_dict(place.image,place.name,place.url)
                 flex.make_flex_massage_content_dict()
                 flex.reply(reply_token)
 
                 return HttpResponse("ok")
+
 
         #表示用のカテゴリをpostbackした時
 
@@ -92,6 +105,13 @@ def index_view(request):
                 select_category = CategorySelect()
                 select_category.CS_reply_show(reply_token)
                 return HttpResponse("ok")
+            
+            if message['text'] in "やめる":
+                statuses = Status.objects.exclude(status=0)
+                for status in statuses:
+                    status.status=0
+                    status.save()
+                
             
 
             # 「リセットして」とメッセージが送られた時
@@ -122,6 +142,9 @@ def index_view(request):
                     status.status = 0
                     status.save()
             
+
+
+            
             #URLが送られて、「行きたい」が送られた後に場所が入力された時
             elif Status.objects.filter(status=4):
                 db_register_url_start_place(reply_token,message)
@@ -130,6 +153,13 @@ def index_view(request):
             elif Status.objects.filter(status=6):
                 db_register_url_start_detail(reply_token,message)
                 return HttpResponse("ok")
+
+            #「カテゴリーカテゴリー編集して」と送られてきた時
+            elif "編集して" in message['text']:
+                db_add_category(reply_token,message)
+                return HttpResponse("ok")
+
+
 
 
         return HttpResponse("ok")
@@ -184,7 +214,7 @@ def db_register_url(reply_token,message):
     print(f"名前と一致するidをデータベースから入手しました。ちなみにidは{place_data.id}です")
     #urlをデータベースに登録
     place_data.url = recieved_url
-    place_data.image = received_url
+    place_data.image = "https://s.wordpress.com/mshots/v1/" + recieved_url
     status.save()
     place_data.save()
     select_category = CategorySelect()
@@ -224,3 +254,7 @@ def db_register_url_start_detail(reply_token,message):
     send_text_place = "保存しました"
     line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
     line_message_send_name.reply(reply_token)
+
+def db_add_category(reply_token,message):
+    return 0
+    

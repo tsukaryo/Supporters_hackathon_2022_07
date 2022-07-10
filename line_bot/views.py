@@ -3,7 +3,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 
 from .utils import message_creater
-from .line_message import LineMessage,CategorySelect
+from .line_message import LineMessage,CategorySelect,Category_show
 from .models import Place,Status,Category
 import pprint
 from .utils.flex_messages import FlexMessage
@@ -23,6 +23,7 @@ status
 4:場所の入力待ち
 6:詳細(detail)の入力まち
 7:カテゴリー編集
+8:表示の際のワード待ち
 """
 
 @csrf_exempt
@@ -42,6 +43,11 @@ def index_view(request):
             post_back = data["postback"]
             post_back_data = post_back["data"] #postbackのデータが入ってる
             
+            # categories = Category.objects.all()
+            # for category in categories:
+            #     recieved_data.append(category.category+"_表示")
+            # recieved_data.append("ALL_表示")
+
             recieved_data = ["食事_表示","旅行_表示","風俗_表示","ALL_表示"]
             #登録のためのカテゴリが選ばれた場合
             if Status.objects.filter(status=5):
@@ -70,7 +76,11 @@ def index_view(request):
                 return HttpResponse("ok")
 
             #表示のためのカテゴリが選ばれた場合(all)
-            elif post_back_data == recieved_data[3]:
+            elif post_back_data == recieved_data[-1]:
+                Status.objects.create(status=8)
+                send_text = "詳細や行きたい場所入力してください"
+                line_message_send = LineMessage(message_creater.create_single_text_message(send_text))
+                line_message_send.reply(reply_token)
                 places = Place.objects.all()
                 # image_file = "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png"
                 flex = FlexMessage()
@@ -103,8 +113,15 @@ def index_view(request):
                 
             # 「表示して」とメッセージが送られた時
             elif message['text'] == "表示して":
-                select_category = CategorySelect()
-                select_category.CS_reply_show(reply_token)
+                # select_category = CategorySelect()
+                # select_category.CS_reply_show(reply_token)
+                categories = Category.objects.all()
+
+                select_category = Category_show()
+                for cat in categories:
+                    select_category.make_item_list(cat.category)
+                select_category.reply()
+
                 return HttpResponse("ok")
             
             if message['text'] in "やめる":
@@ -112,8 +129,6 @@ def index_view(request):
                 for status in statuses:
                     status.status=0
                     status.save()
-                
-            
 
             # 「リセットして」とメッセージが送られた時
             elif message['text'] == "リセットして":
@@ -156,18 +171,27 @@ def index_view(request):
                 return HttpResponse("ok")
 
             #「カテゴリー追加して」と送られてきた時
-            elif "追加して" in message['text']:
-                db_add_category(reply_token,message)
+            elif "カテゴリー追加して" in message['text']:
+                db_add_dec_category(reply_token,message)
                 return HttpResponse("ok")
             
             #追加したいカテゴリーを入力した時
             elif Status.objects.filter(status=7):
-                db_add_category(reply_token,mesasge)
+                db_add_category(reply_token,message)
                 return HttpResponse("ok")
+
             
+            # 詳細検索で表示する時
+            elif Status.objects.filter(status=8):
+                places = Place.objects.filter(detail__contains=message['text'])
+                flex = FlexMessage()
+                for place in places:
+                    flex.make_content_dict(place.image,place.name,place.url)
+                flex.make_flex_massage_content_dict()
+                flex.reply(reply_token)
+                return HttpResponse("ok")
 
-
-
+   
 
         return HttpResponse("ok")
 
@@ -269,12 +293,13 @@ def db_add_dec_category(reply_token,message):
     line_message_send.reply(reply_token)
     return 0
     
-def db_add_category(reply_token,mesasge):
+def db_add_category(reply_token,message):
     status = Status.objects.get(status=7)
     status.status = 0
     status.save()
     recieved_category = message['text']
     Category.objects.create(category=recieved_category)
+    return 0
     
 
     

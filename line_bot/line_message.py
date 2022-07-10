@@ -79,10 +79,74 @@ class QuickReply():
         except urllib.error.URLError as err:
             print(err.reason)
 
+def make_category_item(category_name):
+    item = {
+        {
+            "type": "action",
+            "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLUcVu6uzRhfdsJ5_-S8FueUWdiFfzrhs4sJ5trdGjIA8OtO_uj5-N6XIh-TA7vDNCbddEYFQlt5QmHnorCEdXbIcG4R0WaCx19wvPocI1fuwlfZXNJodvDY0ysBw7sTvUqmweX-jV-ukVn5iU2SMB0WQQ=s256-no?authuser=0",
+            "action": {
+                "type": "postback",
+                "label": "",#ここをcategory_nameで作成
+                "data": "",#ここをcategory_nameで作成
+                "displayText": "",#ここをcategory_nameで作成
+            }
+        },
+    }
+    item["action"]["label"] = category_name
+    item["action"]["data"] = category_name
+    item["action"]["displayText"] = category_name
+    return item
+
+#最終的なcontents作成
+def make_quick_category_body(reply_token,items_list):
+    body = {
+        'replyToken': reply_token,
+            "messages":[
+                {
+                    "type": "text",
+                    "text": "カテゴリーを選択してね",
+                    "quickReply":{
+                        "items": [
+                            items_list
+                        ]
+                    }
+                }
+            ]
+        }
+    return body
+
+
+class Category_show(): 
+    def __init__(self):
+        self.item_list = []
+        self.body= {}
+    
+    def make_item_list(self, category_name):
+        item = make_category_item(category_name)
+        self.item_list.append(item)
+        return 0
+    
+    def reply(self):
+        self.body = make_quick_category_body(self.items_list)
+        req = urllib.request.Request(REPLY_ENDPOINT_URL, json.dumps(self.body).encode(), HEADER)
+        try:
+            with urllib.request.urlopen(req) as res:
+                body = res.read()
+        except urllib.error.HTTPError as err:
+            print(err)
+        except urllib.error.URLError as err:
+            print(err.reason)
+        return 0
+
+
 
 class CategorySelect():
     def __init__(self) -> None:
         pass
+
+    def create_items(category_name):
+        return 0
+
 
 
     def CS_reply_register(self, reply_token):
@@ -96,7 +160,7 @@ class CategorySelect():
                         "items": [
                             {
                                 "type": "action",
-                                "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLUpo7nGeeYZn83C2pxHEP3Mu76CKwJ84JvCrEgjKzBVfInjko_cA9I1f5qAsN23AlIXTrOqY6ymL660GY_QXNS-frllXepApgnTTW3jklnxMiU4k0_J2bX16SOYgfMlHTR_FAmNX1JJBbAfwYDC0CK50A=s256-no?authuser=0",
+                                "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLUcVu6uzRhfdsJ5_-S8FueUWdiFfzrhs4sJ5trdGjIA8OtO_uj5-N6XIh-TA7vDNCbddEYFQlt5QmHnorCEdXbIcG4R0WaCx19wvPocI1fuwlfZXNJodvDY0ysBw7sTvUqmweX-jV-ukVn5iU2SMB0WQQ=s256-no?authuser=0",
                                 "action": {
                                     "type": "postback",
                                     "label": "食事",
@@ -106,7 +170,7 @@ class CategorySelect():
                             },
                             {
                                 "type": "action",
-                                "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLW9eV0umcXblTMmLEx4PUoRKQ0JEMwLhqroEXxJg5QziilhPI_S0Xjrlr7yL6NgW2i1tOOLXsPEC4PcEdSa6ue1JVTR39tPZQnVdfVTBMqmN9jLzPFc3-fgi8i6OwKpGQegsInLMs86l8X7UjKLHBePiQ=s256-no?authuser=0",
+                                "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLVGwM2nrMTg5zUYen435erz8hNigWAQS-qC3RFCXtjioe3Uyy-Tna0FZt99mr-51_6XZLs9DXRi1nCYKR7gzo2s-VR4sCcXL_Q_wk-mXnTtmJN6OLQUGzaKGUpdyoU9Es55rIFXhOVCGUMSFJKl-wBGgA=s256-no?authuser=0",
                                 "action": {
                                     "type": "postback",
                                     "label": "旅行",
@@ -153,7 +217,7 @@ class CategorySelect():
                         "items": [
                             {
                                 "type": "action",
-                                "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLUpo7nGeeYZn83C2pxHEP3Mu76CKwJ84JvCrEgjKzBVfInjko_cA9I1f5qAsN23AlIXTrOqY6ymL660GY_QXNS-frllXepApgnTTW3jklnxMiU4k0_J2bX16SOYgfMlHTR_FAmNX1JJBbAfwYDC0CK50A=s256-no?authuser=0",
+                                "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLUcVu6uzRhfdsJ5_-S8FueUWdiFfzrhs4sJ5trdGjIA8OtO_uj5-N6XIh-TA7vDNCbddEYFQlt5QmHnorCEdXbIcG4R0WaCx19wvPocI1fuwlfZXNJodvDY0ysBw7sTvUqmweX-jV-ukVn5iU2SMB0WQQ=s256-no?authuser=0",
                                 "action": {
                                     "type": "postback",
                                     "label": "食事",
@@ -163,7 +227,7 @@ class CategorySelect():
                             },
                             {
                                 "type": "action",
-                                "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLW9eV0umcXblTMmLEx4PUoRKQ0JEMwLhqroEXxJg5QziilhPI_S0Xjrlr7yL6NgW2i1tOOLXsPEC4PcEdSa6ue1JVTR39tPZQnVdfVTBMqmN9jLzPFc3-fgi8i6OwKpGQegsInLMs86l8X7UjKLHBePiQ=s256-no?authuser=0",
+                                "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLVGwM2nrMTg5zUYen435erz8hNigWAQS-qC3RFCXtjioe3Uyy-Tna0FZt99mr-51_6XZLs9DXRi1nCYKR7gzo2s-VR4sCcXL_Q_wk-mXnTtmJN6OLQUGzaKGUpdyoU9Es55rIFXhOVCGUMSFJKl-wBGgA=s256-no?authuser=0",
                                 "action": {
                                     "type": "postback",
                                     "label": "旅行",
@@ -183,7 +247,7 @@ class CategorySelect():
                             },
                             {
                                 "type": "action",
-                                "imageUrl": "https://lh3.googleusercontent.com/4qTjARm0ydA1nmTCPCMwMZcY-CQWFOOgdzIdwGGT_XZtMmYu_9Ijr8USDApT9UdkWAtO4dn_A_Jj76Ve1U1gwf9hsMwH6gLcpk4UxYxzQaP1R2rX2u05XfgsbrL44XABcWHCaRl8mtZZrfHxdkziXN5Xv8-13_YHuJ8TmzMc3MDC2BM41N5Mt71VVTTcYm5spIoJZJ4zmyXG-bxMtEZNf0AezfL8ATH6Rhp4DooxajogLqrVHT9Jf_fvQLNTzfz1EjXAVkG0EYnQ9DwUlPEvlQ8y-Oe6nn_ysleYtk_LMYc6K9w7jPZThnAsTopFcXRM1vvf-MV9Uby03yjiNl54ffkoaf6_QvzGxKnSmJ1ITDU4N8C48ctJ8qgr_z4wuDhhOA1fZUQDTzVH1tJKWpzzY8OsT6ehbVWtb_p6GEQtv5vWgh3Gk31MwX8W7zmj2V0QhonzYEDEJSlvUaWu0nh7UCTS7BADNw36QAii_-fT0NFr6cxpgNnDttVonIENxh9VyaZAfXU2NIQdQCD0ttrz_BSjmQNzoR2Zesq207uPWqsuKVeX8yL9yka945BRNu00zPYglWqpkzuW58praJUHpbWBKvgg60GyvKYdi9tZlWr8ohyQg0D72QfBCGWBEDd48QZFDF3fmw2aiBgEGQKJvfBKSEwCqaA16hb-g8QELGbAo3u0JptjdDsI3RPWtm4ujwAGiTs5EHvhBtLoL_S7tsA_t5Cooze9R_1QBvIAZYleqwuiPq85Qh_pZPaQPA06YpK5zK5XOHHHvi_o5ZsApOFL6zmEZ9Q2toke=s256-no?authuser=0",
+                                "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLU1ynaba5Q3CYU6agvGQBL4quiz191SP_QyWrxa4sdZC8tft_UJYnHDYekAsN0rh3bdlxQHiwGvdox6kKIvh1gYvTdTK1zZLZrAxNDbHvvEKo5KpxVSwNqVt2hzjam63zT-skVGv77xvUQ-4UKzWamu_Q=s256-no?authuser=0",
                                 "action": {
                                     "type": "postback",
                                     "label": "全て",
@@ -204,3 +268,6 @@ class CategorySelect():
             print(err)
         except urllib.error.URLError as err:
             print(err.reason)
+
+
+

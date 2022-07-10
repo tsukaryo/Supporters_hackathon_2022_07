@@ -82,7 +82,7 @@ class QuickReply():
 def make_category_item(category_name):
     item = {
             "type": "action",
-            "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLUcVu6uzRhfdsJ5_-S8FueUWdiFfzrhs4sJ5trdGjIA8OtO_uj5-N6XIh-TA7vDNCbddEYFQlt5QmHnorCEdXbIcG4R0WaCx19wvPocI1fuwlfZXNJodvDY0ysBw7sTvUqmweX-jV-ukVn5iU2SMB0WQQ=s256-no?authuser=0",
+            "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLWxIgFi1YDBcB85CcFkwsA9ZJEgZg-l8jw_s3qy0pAcb11XLKKrqyh9yaepyb3wDbvzMuWJi44LctXHjJQ7GjFGbyYD0xcd6Wgeev3Tjb-O6evGBRFknQJ0oBFk4ZnsW7xfNkkXYxnHA3QpkRg71Pu7nA=s256-no?authuser=0",
             "action": {
                 "type": "postback",
                 "label": "",#ここをcategory_nameで作成
@@ -120,7 +120,7 @@ class Category_show():
         self.body= {}
         self.all_item = {
             "type": "action",
-            "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLUcVu6uzRhfdsJ5_-S8FueUWdiFfzrhs4sJ5trdGjIA8OtO_uj5-N6XIh-TA7vDNCbddEYFQlt5QmHnorCEdXbIcG4R0WaCx19wvPocI1fuwlfZXNJodvDY0ysBw7sTvUqmweX-jV-ukVn5iU2SMB0WQQ=s256-no?authuser=0",
+            "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLU1ynaba5Q3CYU6agvGQBL4quiz191SP_QyWrxa4sdZC8tft_UJYnHDYekAsN0rh3bdlxQHiwGvdox6kKIvh1gYvTdTK1zZLZrAxNDbHvvEKo5KpxVSwNqVt2hzjam63zT-skVGv77xvUQ-4UKzWamu_Q=s256-no?authuser=0",
             "action": {
                 "type": "postback",
                 "label": "ALL",#ここをcategory_nameで作成

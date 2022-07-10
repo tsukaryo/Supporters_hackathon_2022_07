@@ -42,13 +42,14 @@ def index_view(request):
         if event_type == "postback":
             post_back = data["postback"]
             post_back_data = post_back["data"] #postbackのデータが入ってる
-            
-            # categories = Category.objects.all()
-            # for category in categories:
-            #     recieved_data.append(category.category+"_表示")
-            # recieved_data.append("ALL_表示")
+            received_data = []
+            categories = Category.objects.all()
+            for category in categories:
+                received_data.append(category.category)
+            received_data.append("ALL")
 
-            recieved_data = ["食事_表示","旅行_表示","風俗_表示","ALL_表示"]
+
+            # recieved_data = ["食事_表示","旅行_表示","風俗_表示","ALL_表示"]
             #登録のためのカテゴリが選ばれた場合
             if Status.objects.filter(status=5):
                 print("EVENT:", data)
@@ -65,8 +66,8 @@ def index_view(request):
                 return HttpResponse("ok")
 
             #表示のためのカテゴリが選ばれた場合(all以外)
-            elif post_back_data in recieved_data[0:2]:
-                places = Place.objects.filter(category=post_back_data[0:2])
+            elif post_back_data in received_data[:-1]:
+                places = Place.objects.filter(category=post_back_data)
                 # image_file = "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png"
                 flex = FlexMessage()
                 for place in places:
@@ -76,7 +77,7 @@ def index_view(request):
                 return HttpResponse("ok")
 
             #表示のためのカテゴリが選ばれた場合(all)
-            elif post_back_data == recieved_data[-1]:
+            elif post_back_data == received_data[-1]:
                 Status.objects.create(status=8)
                 send_text = "詳細や行きたい場所入力してください"
                 line_message_send = LineMessage(message_creater.create_single_text_message(send_text))

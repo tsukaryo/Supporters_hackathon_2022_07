@@ -97,7 +97,7 @@ def make_category_item(category_name):
     return item
 
 #最終的なcontents作成
-def make_quick_category_body(reply_token,items_list):
+def make_quick_category_body(reply_token,item_list):
     body = {
         'replyToken': reply_token,
             "messages":[
@@ -106,7 +106,7 @@ def make_quick_category_body(reply_token,items_list):
                     "text": "カテゴリーを選択してね",
                     "quickReply":{
                         "items": 
-                            items_list
+                            item_list
                     }
                 }
             ]

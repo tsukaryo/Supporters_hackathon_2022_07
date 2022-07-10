@@ -299,6 +299,9 @@ def db_add_category(reply_token,message):
     status.save()
     recieved_category = message['text']
     Category.objects.create(category=recieved_category)
+    send_text_place = "カテゴリー追加しました"
+    line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
+    line_message_send_name.reply(reply_token)
     return 0
     
 

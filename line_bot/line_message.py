@@ -81,7 +81,6 @@ class QuickReply():
 
 def make_category_item(category_name):
     item = {
-        {
             "type": "action",
             "imageUrl": "https://lh3.googleusercontent.com/pw/AM-JKLUcVu6uzRhfdsJ5_-S8FueUWdiFfzrhs4sJ5trdGjIA8OtO_uj5-N6XIh-TA7vDNCbddEYFQlt5QmHnorCEdXbIcG4R0WaCx19wvPocI1fuwlfZXNJodvDY0ysBw7sTvUqmweX-jV-ukVn5iU2SMB0WQQ=s256-no?authuser=0",
             "action": {
@@ -90,8 +89,8 @@ def make_category_item(category_name):
                 "data": "",#ここをcategory_nameで作成
                 "displayText": "",#ここをcategory_nameで作成
             }
-        },
-    }
+        }
+    
     item["action"]["label"] = category_name
     item["action"]["data"] = category_name
     item["action"]["displayText"] = category_name
@@ -106,9 +105,8 @@ def make_quick_category_body(reply_token,items_list):
                     "type": "text",
                     "text": "カテゴリーを選択してね",
                     "quickReply":{
-                        "items": [
+                        "items": 
                             items_list
-                        ]
                     }
                 }
             ]

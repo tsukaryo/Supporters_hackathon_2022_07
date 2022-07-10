@@ -21,6 +21,7 @@ status
 5.場所のカテゴリ
 3:「行きたい」待ち(URLスタートの時)
 4:場所の入力待ち
+6:詳細(detail)の入力まち
 """
 
 @csrf_exempt
@@ -47,12 +48,12 @@ def index_view(request):
                 
                 #post_back_dataを引数にカテゴリ表示する関数つくって
                 status = Status.objects.get(status=5)
-                status.status = 0
+                status.status = 6
                 place_data = Place.objects.get(id=status.place_id)
                 place_data.category = post_back_data
                 place_data.save()
                 status.save()
-                send_text = "保存しました"
+                send_text = "詳細や場所を入力してください"
                 line_message_send = LineMessage(message_creater.create_single_text_message(send_text))
                 line_message_send.reply(reply_token)
                 return HttpResponse("ok")
@@ -126,6 +127,11 @@ def index_view(request):
                 db_register_url_start_place(reply_token,message)
                 return HttpResponse("ok")
 
+            elif Status.objects.filter(status=6):
+                db_register_url_start_detail(reply_token,message)
+                return HttpResponse("ok")
+
+
         return HttpResponse("ok")
 
 
@@ -178,6 +184,7 @@ def db_register_url(reply_token,message):
     print(f"名前と一致するidをデータベースから入手しました。ちなみにidは{place_data.id}です")
     #urlをデータベースに登録
     place_data.url = recieved_url
+    place_data.image = received_url
     status.save()
     place_data.save()
     select_category = CategorySelect()
@@ -207,3 +214,13 @@ def db_register_url_start_place(reply_token,message):
     select_category.CS_reply_register(reply_token)
     return 0
 
+def db_register_url_start_detail(reply_token,message):
+    status = Status.objects.get(status=6)
+    status.status = 0
+    status.save()
+    place_data = Place.objects.get(id=status.place_id)
+    place_data.detail = message['text']
+    place_data.save()
+    send_text_place = "保存しました"
+    line_message_send_name = LineMessage(message_creater.create_single_text_message(send_text_place))
+    line_message_send_name.reply(reply_token)

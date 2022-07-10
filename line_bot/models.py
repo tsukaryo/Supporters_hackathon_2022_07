@@ -7,7 +7,7 @@ class Place(models.Model):
     url = models.CharField(max_length=200,blank=True,null=True)
     #Imageurl = models.CharField(max_length=200,blank=True,null=True)
     category = models.CharField(max_length=200,default = "NoCategory")
-    # detail = models.CharField(max_length=200,default = "NoCategory")
+    detail = models.CharField(max_length=200,default = "NoCategory")
 
 
 

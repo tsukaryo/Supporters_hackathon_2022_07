@@ -14,5 +14,5 @@ class Category(models.Model):
 
 
 class Status(models.Model):
-    place_id = models.IntegerField()
+    place_id = models.IntegerField(blank=True,null=True)
     status = models.IntegerField()
